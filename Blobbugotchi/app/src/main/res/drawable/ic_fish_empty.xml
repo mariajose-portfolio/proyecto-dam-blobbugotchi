@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- COLA DEL PEZ -->
+    <path
+        android:fillColor="@color/light_blue"
+        android:strokeColor="@color/dark_blue"
+        android:strokeWidth="2"
+        android:pathData="M15,12 C17,10 20,8 22,8 C20,10 19,11 19,12 C19,13 20,14 22,16 C20,16 17,14 15,12Z" />
+
+    <!-- CUERPO DE PEZ -->
+    <path
+        android:fillColor="@color/light_blue"
+        android:strokeColor="@color/dark_blue"
+        android:strokeWidth="2"
+        android:pathData="M2,12C2,9 5,7 9,7C13,7 16,9 16,12C16,15 13,17 9,17C5,17 2,15 2,12Z" />
+
+    <!-- OJO DEL PEZ (relleno) -->
+    <path
+        android:fillColor="@color/dark_blue"
+        android:strokeColor="@color/dark_blue"
+        android:strokeWidth="1"
+        android:pathData="M6,11A1,1 0,1 0,6,13A1,1 0,1 0,6,11Z" />
+
+</vector>

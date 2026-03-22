@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Celda de la galería -->
+    <style name="GalleryCell">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_margin">6dp</item>
+        <item name="android:background">@drawable/bg_gallery_cell</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <!-- Imagen dentro de la celda -->
+    <style name="GalleryCellImage">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <!-- Interrogación de bloqueado -->
+    <style name="GalleryCellLock">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom|end</item>
+        <item name="android:text">?</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:paddingBottom">2dp</item>
+    </style>
+
+    <!-- TITULOS DE PANTALLAS -->
+    <style name="Titulos">
+        <item name="android:fontFamily">@font/arista_pro_alternate_bold</item>
+        <item name="android:textSize">35sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/dark_blue</item>
+    </style>
+
+    <!-- OPCIONES DE TIEMPO EN EL POMODORO -->
+    <style name="PopupTextOption">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/chocolate_and_vanilla</item>
+        <item name="android:background">@drawable/bg_time_option_normal</item>
+    </style>
+</resources>

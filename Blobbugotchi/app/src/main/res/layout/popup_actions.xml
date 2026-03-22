@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/bg_gallery_cell"
+    android:padding="12dp"
+    android:gravity="center">
+
+    <!-- ALIMENTAR -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="8dp">
+
+        <ImageButton
+            android:id="@+id/btn_feed"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="@drawable/btn_small"
+            android:src="@drawable/ic_fish_filled"
+            android:scaleType="fitCenter"
+            android:padding="8dp"
+            android:contentDescription="Alimentar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FEED"
+            android:fontFamily="@font/arista_pro_alternate_bold"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- JUGAR -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="8dp">
+
+        <ImageButton
+            android:id="@+id/btn_play"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="@drawable/btn_small"
+            android:src="@drawable/ic_play"
+            android:scaleType="fitCenter"
+            android:padding="8dp"
+            android:contentDescription="Jugar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PLAY"
+            android:fontFamily="@font/arista_pro_alternate_bold"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- POMODORO -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="8dp">
+
+        <ImageButton
+            android:id="@+id/btn_pomodoro_action"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="@drawable/btn_small"
+            android:src="@drawable/btn_time"
+            android:scaleType="fitCenter"
+            android:padding="8dp"
+            android:contentDescription="Pomodoro"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FOCUS"
+            android:fontFamily="@font/arista_pro_alternate_bold"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- DORMIR -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_margin="8dp">
+
+        <ImageButton
+            android:id="@+id/btn_sleep"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="@drawable/btn_small"
+            android:src="@drawable/ic_moon_filled"
+            android:scaleType="fitCenter"
+            android:padding="8dp"
+            android:contentDescription="Dormir"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SLEEP"
+            android:fontFamily="@font/arista_pro_alternate_bold"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>

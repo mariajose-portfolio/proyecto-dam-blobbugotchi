@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_blue"
+    android:padding="16dp">
+
+    <!-- BOTÓN CERRAR -->
+    <ImageButton
+        android:id="@+id/btn_close"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/bg_gallery_cell"
+        android:src="@drawable/ic_close"
+        android:contentDescription="Cerrar" />
+
+    <!-- TÍTULO -->
+    <TextView
+        android:id="@+id/galleryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="BLOBBU JOURNAL"
+        style="@style/Titulos"
+        android:layout_marginTop="8dp"/>
+
+    <!-- SEPARADOR -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/galleryTitle"
+        android:layout_marginTop="8dp"
+        android:background="@color/dark_blue"/>
+
+    <!-- CONTENEDOR FILAS -->
+    <LinearLayout
+        android:id="@+id/galleryGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <!-- FILA 1: Baby, Teen Mew, Teen Art, Teen Tides -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/cell_baby"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_gallery_cell">
+                <ImageView
+                    android:id="@+id/img_baby"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/spr_locked" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="?"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/cell_teen_mew"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_gallery_cell">
+                <ImageView
+                    android:id="@+id/img_teen_mew"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/spr_locked" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="?"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/cell_teen_art"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_gallery_cell">
+                <ImageView
+                    android:id="@+id/img_teen_art"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/spr_locked" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="?"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/cell_teen_tides"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_gallery_cell">
+                <ImageView
+                    android:id="@+id/img_teen_tides"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/spr_locked" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="?"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"/>
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <!-- FILA 2: Teen Bad, Adult Mew, Adult Art, Adult Mer -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/cell_teen_bad"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_gallery_cell">
+                <ImageView
+                    android:id="@+id/img_teen_bad"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/spr_locked" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="?"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/cell_adult_mew"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_gallery_cell">
+                <ImageView
+                    android:id="@+id/img_adult_mew"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/spr_locked" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="?"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/cell_adult_art"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_gallery_cell">
+                <ImageView
+                    android:id="@+id/img_adult_art"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/spr_locked" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="?"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/cell_adult_mer"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_gallery_cell">
+                <ImageView
+                    android:id="@+id/img_adult_mer"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/spr_locked" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="?"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"/>
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <!-- FILA 3: Adult Secret, Adult Bad (+ 2 vacíos para completar la fila) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/cell_adult_secret"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_gallery_cell">
+                <ImageView
+                    android:id="@+id/img_adult_secret"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/spr_locked" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="?"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/cell_adult_bad"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_gallery_cell">
+                <ImageView
+                    android:id="@+id/img_adult_bad"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/spr_locked" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="?"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="2dp"/>
+            </FrameLayout>
+
+            <!-- Espacios vacíos para completar la fila de 4 -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="6dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
