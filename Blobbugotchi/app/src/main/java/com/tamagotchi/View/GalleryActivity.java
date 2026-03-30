@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.tamagotchi.R;
 
-public class GalleryActivity extends AppCompatActivity {
+public class GalleryActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

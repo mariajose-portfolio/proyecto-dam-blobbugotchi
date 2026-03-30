@@ -9,9 +9,11 @@ import android.widget.SeekBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.tamagotchi.Controller.SoundManager;
+import com.tamagotchi.DataLayer.DatabaseHelper;
+import com.tamagotchi.Model.Config.Configuration;
 import com.tamagotchi.R;
 
-public class ConfigurationActivity extends AppCompatActivity {
+public class ConfigurationActivity extends BaseActivity {
 
     private SeekBar seekMaster, seekMusic, seekSfx;
 
@@ -33,6 +35,12 @@ public class ConfigurationActivity extends AppCompatActivity {
         seekMaster = findViewById(R.id.seekMasterVolume);
         seekMusic = findViewById(R.id.seekMusicVolume);
         seekSfx = findViewById(R.id.seekSfxVolume);
+
+        // Cargar valores guardados en los seekbars
+        Configuration config = DatabaseHelper.getInstance(this).loadConfiguration();
+        seekMaster.setProgress((int) (config.getMasterVolume() * 100));
+        seekMusic.setProgress((int) (config.getBgmVolume() * 100));
+        seekSfx.setProgress((int) (config.getSeVolume() * 100));
 
         seekMaster.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

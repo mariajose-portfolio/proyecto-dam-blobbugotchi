@@ -13,12 +13,14 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.tamagotchi.Controller.SoundManager;
+import com.tamagotchi.DataLayer.DatabaseHelper;
+import com.tamagotchi.Model.Config.Configuration;
 import com.tamagotchi.R;
 import com.tamagotchi.Controller.GameFragment;
 import android.widget.PopupWindow;
 import com.tamagotchi.Model.Blobbu.BlobbuAction;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private LinearLayout statsBars, menuButtons;
     private ImageButton btn_menu, btn_accept, btn_cancel;
     private GameFragment gameFragment;
@@ -133,10 +135,20 @@ public class MainActivity extends AppCompatActivity {
         statsBars.setVisibility(View.GONE);
         menuButtons.setVisibility(View.GONE);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        SoundManager.getInstance(this).playMainBGM();
+
+        // Cargar configuración guardada y aplicarla al SoundManager
+        Configuration config = DatabaseHelper.getInstance(this).loadConfiguration();
+        SoundManager sm = SoundManager.getInstance(this);
+        sm.setMasterVolume(config.getMasterVolume());
+        sm.setBgmVolume(config.getBgmVolume());
+        sm.setSfxVolume(config.getSeVolume());
+
+        // Siempre arrancar desde cero para garantizar que suena
+        sm.playMainBGM();
     }
 
     @Override

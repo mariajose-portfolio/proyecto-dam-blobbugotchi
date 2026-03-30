@@ -3,14 +3,16 @@ package com.tamagotchi.Model.Blobbu;
 public class Blobbu {
     private String name;
 
-    // 0 - 100 → 100 = no necesita nada, 0 = necesita atención
+    // De 0 a 100, 100 = no necesita nada, 0 = necesita atención
     private int happyLvl;
     private int hungryLvl;
     private int sleepinessLvl;
     private int careMistakes;
     private double timeTogether;
+    private int maxScore;
 
     private BlobbuState currentState; // Control del estado
+    private EvolutionType evolutionType;
 
     // Umbrales de estado
     private static final int CRITICAL = 20;
@@ -24,6 +26,9 @@ public class Blobbu {
         this.sleepinessLvl = 50;
         this.careMistakes = 0;
         this.timeTogether = 0;
+        this.maxScore = 0;
+        this.evolutionType = EvolutionType.EGG;
+
         updateState();
     }
 
@@ -100,6 +105,31 @@ public class Blobbu {
 
     public void addTimeTogether(double hours) {
         this.timeTogether += hours;
+    }
+
+    // Getter de evolutionType
+    public EvolutionType getEvolutionType() {
+        return evolutionType; // asegúrate de tener este atributo
+    }
+
+    // Getter de maxScore
+    public int getMaxScore() {
+        return maxScore;
+    }
+
+    // Constructor estático para cargar desde BD
+    public static Blobbu fromDatabase(String name, EvolutionType evolutionType, int happyLvl,
+         int hungryLvl, int sleepinessLvl, int careMistakes, double timeTogether, int maxScore) {
+        Blobbu blobbu = new Blobbu(name);
+        blobbu.happyLvl = happyLvl;
+        blobbu.hungryLvl = hungryLvl;
+        blobbu.sleepinessLvl = sleepinessLvl;
+        blobbu.careMistakes = careMistakes;
+        blobbu.timeTogether = timeTogether;
+        blobbu.maxScore = maxScore;
+        blobbu.updateState();
+
+        return blobbu;
     }
 
     /**

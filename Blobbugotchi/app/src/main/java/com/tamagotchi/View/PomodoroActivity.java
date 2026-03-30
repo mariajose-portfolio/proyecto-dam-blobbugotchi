@@ -21,9 +21,9 @@ import com.tamagotchi.Controller.SoundManager;
 import com.tamagotchi.Model.Games.Pomodoro;
 import com.tamagotchi.R;
 
-public class PomodoroActivity extends AppCompatActivity {
+public class PomodoroActivity extends BaseActivity {
 
-    private static final int DEFAULT_MINUTES = 15; // 15 por defecto como en la imagen
+    private static final int DEFAULT_MINUTES = 15; // 15 por defect
 
     private CircularTimerView circularTimer;
     private TextView tvTimer;
@@ -79,9 +79,7 @@ public class PomodoroActivity extends AppCompatActivity {
         circularTimer.post(() -> showDurationSelector());
     }
 
-    // =====================================================
-    // POPUP SELECTOR DE DURACIÓN
-    // =====================================================
+    // --- POPUP SELECTOR DE DURACIÓN ---
     private void showDurationSelector() {
         View popupView = LayoutInflater.from(this).inflate(R.layout.popup_pomodoro_selector, null);
 
@@ -137,6 +135,7 @@ public class PomodoroActivity extends AppCompatActivity {
             tv.setBackgroundResource(R.drawable.bg_time_option_normal);
             tv.setTextColor(getColor(R.color.black));
         }
+
         views[selectedIndex].setBackgroundResource(R.drawable.bg_time_option_selected);
         views[selectedIndex].setTextColor(getColor(R.color.dark_blue));
     }
@@ -151,9 +150,7 @@ public class PomodoroActivity extends AppCompatActivity {
         return -1;
     }
 
-    // =====================================================
-    // TIMER
-    // =====================================================
+    // --- TIMER ---
     public void startTimer(int minutes) {
         if (isRunning) return;
 
@@ -186,6 +183,7 @@ public class PomodoroActivity extends AppCompatActivity {
         }.start();
 
         notifyStudyingState(true);
+
         // Activar animación de pomodoro en el blobbu
         gameController.setPomodoroState(true);
     }
@@ -253,15 +251,6 @@ public class PomodoroActivity extends AppCompatActivity {
         btnPlayPause.setImageResource(R.drawable.ic_play);
     }
 
-    private void resetTimer() {
-        if (countDownTimer != null) countDownTimer.cancel();
-        isRunning = false;
-        timeLeftMillis = totalTimeMillis;
-        btnPlayPause.setImageResource(R.drawable.ic_play);
-        updateTimerDisplay(timeLeftMillis);
-        circularTimer.setProgress(0f);
-    }
-
     private void updateTimerDisplay(long millisUntilFinished) {
         int minutes = (int) (millisUntilFinished / 1000) / 60;
         int seconds = (int) (millisUntilFinished / 1000) % 60;
@@ -271,13 +260,13 @@ public class PomodoroActivity extends AppCompatActivity {
     /**
      * Muestra el popup de resumen al terminar o cancelar el pomodoro.
      * @param elapsedMillis tiempo que ha transcurrido realmente
-     * @param completed     true si terminó el tiempo, false si se canceló
+     * @param completed true si terminó el tiempo, false si se canceló
      */
     private void showResultPopup(long elapsedMillis, boolean completed) {
         // Calcular tiempo transcurrido
         int elapsedSeconds = (int) (elapsedMillis / 1000);
-        int minutes        = elapsedSeconds / 60;
-        int seconds        = elapsedSeconds % 60;
+        int minutes = elapsedSeconds / 60;
+        int seconds = elapsedSeconds % 60;
 
         // Guardar timeTogether en horas decimales en el Blobbu
         double hoursSpent = elapsedMillis / 3_600_000.0;
@@ -285,13 +274,10 @@ public class PomodoroActivity extends AppCompatActivity {
 
         // Inflar el layout
         View popupView = LayoutInflater.from(this).inflate(R.layout.popup_pomodoro_result, null);
-        int popupWidth  = (int) (getResources().getDisplayMetrics().widthPixels * 0.90);
+        int popupWidth = (int) (getResources().getDisplayMetrics().widthPixels * 0.90);
 
-        PopupWindow resultPopup = new PopupWindow(
-                popupView, popupWidth,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                false
-        );
+        PopupWindow resultPopup = new PopupWindow(popupView, popupWidth,
+                ViewGroup.LayoutParams.WRAP_CONTENT, false);
         resultPopup.setElevation(10f);
 
         // Rellenar datos
@@ -313,10 +299,12 @@ public class PomodoroActivity extends AppCompatActivity {
         // Botón otro pomodoro — abre de nuevo el selector de duración
         popupView.findViewById(R.id.btn_repeat).setOnClickListener(v -> {
             resultPopup.dismiss();
+
             // Resetear el timer visualmente
             timeLeftMillis  = totalTimeMillis;
             updateTimerDisplay(timeLeftMillis);
             circularTimer.setProgress(0f);
+
             // Mostrar el selector de duración de nuevo
             showDurationSelector();
         });
@@ -324,9 +312,6 @@ public class PomodoroActivity extends AppCompatActivity {
         resultPopup.showAtLocation(circularTimer, Gravity.CENTER, 0, 0);
     }
 
-    // =====================================================
-    // CICLO DE VIDA
-    // =====================================================
     @Override
     protected void onResume() {
         super.onResume();
@@ -335,14 +320,13 @@ public class PomodoroActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
-        SoundManager.getInstance(this).pauseBGM();
+        super.onPause(); // guarda el progreso via BaseActivity
+        SoundManager.getInstance(this).pauseBGM(); // Pausa la música
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (countDownTimer != null) countDownTimer.cancel();
-        SoundManager.getInstance(this).stopBGM();
     }
 }

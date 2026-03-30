@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.tamagotchi.R;
 
-public class MinigameActivity extends AppCompatActivity {
+public class MinigameActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

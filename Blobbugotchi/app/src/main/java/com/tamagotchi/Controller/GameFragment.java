@@ -23,21 +23,25 @@ import com.tamagotchi.Model.Stats.SleepIconsView;
 import com.tamagotchi.R;
 
 public class GameFragment extends Fragment {
+
+    // MODELO
     private EvolutionType currentPhase;
     private Egg egg;
     private Blobbu blobbu;
+
+    // UI
     private ImageView petImage;
     private ImageView screenBackground;
     private HappyProgressBar happyBar;
     private HungerIconsView hungerBar;
     private SleepIconsView sleepBar;
 
+    // ESTADO
     private Handler handler = new Handler(Looper.getMainLooper());
-    private boolean isSleeping = false; // Controla si está durmiendo
+    private boolean isSleeping = false;
     private StatsDegradationManager degradationManager;
+    private GameController gameController;
 
-    // Color del filtro nocturno: 0x55 = opacidad ~33%, 2B4BFF = azul
-    // Ajusta los dos primeros dígitos para más (77) o menos (33) intensidad
     private static final int NIGHT_FILTER_COLOR = 0x552B4BFF;
 
     public GameFragment() {
@@ -47,31 +51,28 @@ public class GameFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        gameController = GameController.getInstance(requireContext());
+        degradationManager = gameController.getDegradationManager();
+
         petImage = view.findViewById(R.id.petImage);
         screenBackground = requireActivity().findViewById(R.id.screenImage);
-
         happyBar = requireActivity().findViewById(R.id.happyBar);
         hungerBar = requireActivity().findViewById(R.id.hungerBar);
         sleepBar = requireActivity().findViewById(R.id.sleepBar);
 
-        // Obtiene el manager desde GameController y le asigna el callback de UI
-        degradationManager = GameController.getInstance(requireContext()).getDegradationManager();
+        // Callback del tick — solo actualiza la UI
         degradationManager.setOnTickCallback(() -> {
             if (blobbu == null) return;
-
-            // Si el pomodoro está activo, mantener animación de pomodoro
-            GameController gc = GameController.getInstance(requireContext());
-            if (gc.isPomodoroStarted()) {
+            if (gameController.isPomodoroStarted()) {
                 blobbu.setState(BlobbuState.POMODORO);
             }
-
             if (!isSleeping) renderBlobbu(blobbu);
         });
 
         startGame();
     }
 
-    // CICLO DE VIDA — pausar/reanudar el timer
     @Override
     public void onResume() {
         super.onResume();
@@ -84,123 +85,126 @@ public class GameFragment extends Fragment {
         degradationManager.stop();
     }
 
+    // INICIO DEL JUEGO
     private void startGame() {
-        egg = new Egg();
-        blobbu = null;
-        currentPhase = EvolutionType.EGG;
         isSleeping = false;
 
-        playEggIdleAnimation();
-        startEggTimer();
+        // Comprobar si ya hay un Blobbu guardado en la BD
+        Blobbu savedBlobbu = gameController.getBlobbu();
+
+        if (savedBlobbu != null) {
+            // En caso de habernacido el Blobbu en la sesión anterior
+            // restaura el estado directamente sin pasar por el huevo
+            blobbu = savedBlobbu;
+
+            // TODO: usar el evolutionType real cuando haya más fases
+            currentPhase = EvolutionType.BABY;
+            render();
+        }
+        else {
+            // Primera vez — empezar desde el huevo
+            egg = new Egg();
+            blobbu = null;
+            currentPhase = EvolutionType.EGG;
+            playEggIdleAnimation();
+            startEggTimer();
+        }
     }
 
+    // FASE HUEVO
     private void startEggTimer() {
         handler.postDelayed(this::hatchEgg, 30_000);
     }
 
     private void hatchEgg() {
         playEggHatchAnimation();
+
         handler.postDelayed(() -> {
             egg.hatch();
-            blobbu = Blobbu.createBaby();
+
+            // El GameController ya crea y guarda el Blobbu en BD
+            blobbu = gameController.getBlobbu();
             currentPhase = EvolutionType.BABY;
             isSleeping = false;
+
+            // Guardar que el Blobbu ya nació
+            gameController.saveProgress();
             render();
         }, 2000);
     }
 
+    // ACCIONES DEL USUARIO — solo gestiona UI y audio
     public void performAction(BlobbuAction action) {
         if (blobbu == null || currentPhase == EvolutionType.EGG) return;
 
         switch (action) {
             case FEED:
-                performFeed();
+                performFeedUI();
+                gameController.feedBlobbu();
                 break;
             case PLAY:
-                blobbu.play(20);
+                gameController.playWithBlobbu();
                 renderBlobbu(blobbu);
                 break;
             case SLEEP:
-                performSleep();
+                performSleepUI();
                 break;
             case POMODORO:
-                blobbu.passTime();
+                gameController.checkEvolution();
                 renderBlobbu(blobbu);
                 break;
         }
     }
 
     /**
-     * Alimentar: muestra animación de comer, espera a que termine
-     * y luego vuelve al estado normal
+     * UI de alimentar: muestra animación de comer y espera a que termine
      */
-    private void performFeed() {
-        blobbu.eat(20);
+    private void performFeedUI() {
         blobbu.setState(BlobbuState.EATING);
-
-        // Carga la animación de comer
         petImage.setImageResource(R.drawable.anim_baby_eating);
         AnimationDrawable eatAnim = (AnimationDrawable) petImage.getDrawable();
 
-        // Calcula la duración total sumando todos los frames del XML
+        // Calcula duración total desde el XML
         int totalDuration = 0;
-
         for (int i = 0; i < eatAnim.getNumberOfFrames(); i++) {
             totalDuration += eatAnim.getDuration(i);
         }
-
-        // Reproduce la animación de comer
         eatAnim.start();
 
-        // Espera exactamente lo que dura la animación según el XML
+        // Al terminar la animación actualiza la UI con el estado real
         handler.postDelayed(() -> {
-            if (blobbu != null) {
-                blobbu.updateState();
-                renderBlobbu(blobbu);
-            }
+            if (blobbu != null) renderBlobbu(blobbu);
         }, totalDuration);
     }
 
     /**
-     * Dormir: si está despierto lo pone a dormir cambiando el fondo
-     * y aplicando un filtro azul a la carcasa y al blobbu.
-     * Si ya está durmiendo, lo despierta y restaura todo.
+     * UI de dormir: cambia fondo, aplica filtro nocturno y gestiona audio.
+     * La lógica de stats la delega en GameController.
      */
-    private void performSleep() {
+    private void performSleepUI() {
         if (isSleeping) {
             // ---- DESPERTAR ----
             isSleeping = false;
-
-            // Se reproduce la música normal y se quita la de dormir
             SoundManager.getInstance(requireContext()).playMainBGM();
-
-            // Restaurar fondo de día
             screenBackground.setImageResource(R.drawable.screen_background);
-
-            // Quitar filtro nocturno del blobbu
             petImage.clearColorFilter();
-
-            blobbu.updateState();
+            gameController.sleepBlobbu();
             renderBlobbu(blobbu);
         }
         else {
             // ---- DORMIR ----
             isSleeping = true;
-            blobbu.sleep(20);
+            gameController.sleepBlobbu();
             blobbu.setState(BlobbuState.SLEEPING);
-            SoundManager.getInstance(requireContext()).playSleepBGM(); // Música de dormir
-
-            // Cambiar fondo a versión nocturna
+            SoundManager.getInstance(requireContext()).playSleepBGM();
             screenBackground.setImageResource(R.drawable.screen_background_night);
-
-            // Aplicar filtro azul al blobbu para efecto nocturno
             petImage.setColorFilter(NIGHT_FILTER_COLOR, PorterDuff.Mode.SRC_ATOP);
-
             playBabyAnimation();
             renderBlobbu(blobbu);
         }
     }
 
+    // RENDER — solo responsabilidad de actualizar la UI
     private void render() {
         if (currentPhase == EvolutionType.EGG) {
             playEggIdleAnimation();
@@ -211,31 +215,23 @@ public class GameFragment extends Fragment {
     }
 
     private void renderBlobbu(Blobbu blobbu) {
-        if (happyBar  != null) happyBar.setProgress(blobbu.getHappyLvl());
+        if (happyBar != null) happyBar.setProgress(blobbu.getHappyLvl());
         if (hungerBar != null) hungerBar.setHunger(scaleToIcons(blobbu.getHungryLvl()));
-        if (sleepBar  != null) sleepBar.setSleep(scaleToIcons(blobbu.getSleepinessLvl()));
-
-        // Actualiza la animación según el estado actual
-        if (currentPhase != EvolutionType.EGG) {
-            playBabyAnimation();
-        }
+        if (sleepBar != null) sleepBar.setSleep(scaleToIcons(blobbu.getSleepinessLvl()));
+        if (currentPhase != EvolutionType.EGG) playBabyAnimation();
     }
 
-    /**
-     * Convierte un valor 0-100 a una escala de 0-6 para los iconos
-     * Ej: 100 → 6, 50 → 3, 0 → 0
-     */
     private int scaleToIcons(int value) {
         return Math.round(value * 6f / 100f);
     }
 
+    // ANIMACIONES
     private void playEggIdleAnimation() {
         petImage.setImageResource(R.drawable.anim_egg_idle);
         startAnimation();
     }
 
     private void playEggHatchAnimation() {
-        // Reproduce el sonido de nacer del huevo
         SoundManager.getInstance(requireContext()).playSfxHatch();
         petImage.setImageResource(R.drawable.anim_egg_hatching);
         startAnimation();
