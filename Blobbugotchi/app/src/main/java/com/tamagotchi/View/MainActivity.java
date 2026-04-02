@@ -16,6 +16,8 @@ import com.tamagotchi.Model.Config.Configuration;
 import com.tamagotchi.R;
 import com.tamagotchi.Controller.GameFragment;
 import android.widget.PopupWindow;
+import android.widget.Toast;
+
 import com.tamagotchi.Model.Blobbu.BlobbuAction;
 
 public class MainActivity extends BaseActivity {
@@ -52,6 +54,12 @@ public class MainActivity extends BaseActivity {
         btn_menu.setOnClickListener(v -> showStats());
         btn_actions.setOnClickListener(v -> toggleActionsPopup());
         btn_cancel.setOnClickListener(v -> hideStats());
+
+        // RESET
+        findViewById(R.id.btn_reset).setOnClickListener(v -> {
+            DatabaseHelper.getInstance(this).resetAll();
+            Toast.makeText(this, "BD reseteada, reinicia la app", Toast.LENGTH_LONG).show();
+        });
 
         // Botón de la configuración
         ImageButton config = findViewById(R.id.btn_config);
@@ -95,6 +103,12 @@ public class MainActivity extends BaseActivity {
         popupView.findViewById(R.id.btn_play).setOnClickListener(v -> {
             gameFragment.performAction(BlobbuAction.PLAY);
             actionsPopup.dismiss();
+        });
+
+        popupView.findViewById(R.id.btn_pomodoro).setOnClickListener(v ->{
+            gameFragment.performAction(BlobbuAction.POMODORO);
+            Intent intent = new Intent(MainActivity.this, PomodoroActivity.class);
+            startActivity(intent);
         });
 
         // Alterna entre dormir y despertar

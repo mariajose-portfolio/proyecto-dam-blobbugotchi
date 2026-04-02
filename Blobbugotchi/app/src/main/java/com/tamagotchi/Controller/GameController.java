@@ -18,19 +18,14 @@ public class GameController {
 
     private GameController(Context context) {
         dbHelper = DatabaseHelper.getInstance(context);
-
-        // Intentar cargar el Blobbu desde BD
-        blobbu = dbHelper.getBlobbu();
-
-        // Si no existe aún, crear uno nuevo y guardarlo
-        if (blobbu == null) {
-            blobbu = Blobbu.createBaby();
-            dbHelper.insertBlobbu(blobbu);
-        }
-
+        blobbu = dbHelper.getBlobbu(); // puede ser null
         degradationManager = new StatsDegradationManager(blobbu);
-
         evolutionManager = new EvolutionManager(dbHelper);
+    }
+
+    public void initBlobbu(Blobbu newBlobbu) {
+        this.blobbu = newBlobbu;
+        degradationManager.setBlobbu(newBlobbu);
     }
 
     public static GameController getInstance(Context context) {
@@ -77,7 +72,9 @@ public class GameController {
     public void setPomodoroState(boolean active) {
         this.isPomodoroStarted = active;
         degradationManager.setPomodoroActive(active);
+
         if (blobbu == null) return;
+
         if (active) {
             blobbu.setState(BlobbuState.POMODORO);
         } else {
@@ -158,5 +155,9 @@ public class GameController {
 
     public Blobbu getBlobbu() {
         return blobbu;
+    }
+
+    public EvolutionManager getEvolutionManager() {
+        return evolutionManager;
     }
 }

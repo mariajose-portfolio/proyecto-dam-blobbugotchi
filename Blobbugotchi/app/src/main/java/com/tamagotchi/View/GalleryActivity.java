@@ -1,6 +1,8 @@
 package com.tamagotchi.View;
 
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,7 +10,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.tamagotchi.DataLayer.DatabaseHelper;
+import com.tamagotchi.DataLayer.GalleryEntry;
+import com.tamagotchi.Model.Blobbu.Blobbu;
+import com.tamagotchi.Model.Blobbu.EvolutionType;
 import com.tamagotchi.R;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GalleryActivity extends BaseActivity {
 
@@ -17,6 +27,86 @@ public class GalleryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
+        DatabaseHelper db = DatabaseHelper.getInstance(this);
+
+        // Corregir filas duplicadas y sincronizar con el Blobbu actual
+        db.ensureGalleryRows();
+        syncGalleryWithCurrentBlobbu(db);
+
         findViewById(R.id.btn_close).setOnClickListener(v -> finish());
+        loadGallery();
+    }
+
+    private void syncGalleryWithCurrentBlobbu(DatabaseHelper db) {
+        Blobbu blobbu = db.getBlobbu();
+
+        Toast.makeText(this, "Blobbu: " + (blobbu == null ? "NULL" : blobbu.getEvolutionType().name()), Toast.LENGTH_LONG).show();
+
+        if (blobbu == null) return;
+
+        EvolutionType current = blobbu.getEvolutionType();
+
+        if (current != EvolutionType.EGG) {
+            db.unlockCreature(current.ordinal());
+            Toast.makeText(this, "Desbloqueando ordinal: " + current.ordinal() + " (" + current.name() + ")", Toast.LENGTH_LONG).show();
+        }
+
+        // Verificar inmediatamente si el unlock funcionó
+        List<GalleryEntry> check = db.getGallery();
+        for (GalleryEntry e : check) {
+            if (e.creatureId == current.ordinal()) {
+                Toast.makeText(this, "Tras unlock -> creatureId=" + e.creatureId + " isUnlocked=" + e.isUnlocked, Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (current != EvolutionType.EGG && current != EvolutionType.BABY) {
+            db.unlockCreature(EvolutionType.BABY.ordinal());
+        }
+
+        EvolutionType prev = blobbu.getPreviousEvolutionType();
+        if (prev != null) {
+            db.unlockCreature(prev.ordinal());
+        }
+    }
+
+    private void loadGallery() {
+        DatabaseHelper db = DatabaseHelper.getInstance(this);
+        List<GalleryEntry> entries = db.getGallery();
+        EvolutionType[] types = EvolutionType.values();
+
+        Map<EvolutionType, Integer> imageViewIds = new HashMap<>();
+        imageViewIds.put(EvolutionType.BABY,         R.id.img_baby);
+        imageViewIds.put(EvolutionType.TEEN_MEW,     R.id.img_teen_mew);
+        imageViewIds.put(EvolutionType.TEEN_ART,     R.id.img_teen_art);
+        imageViewIds.put(EvolutionType.TEEN_TIDES,   R.id.img_teen_tides);
+        imageViewIds.put(EvolutionType.ADULT_MEW,    R.id.img_adult_mew);
+        imageViewIds.put(EvolutionType.ADULT_ART,    R.id.img_adult_art);
+        imageViewIds.put(EvolutionType.ADULT_MER,    R.id.img_adult_mer);
+        imageViewIds.put(EvolutionType.ADULT_SECRET, R.id.img_adult_secret);
+
+        Map<EvolutionType, Integer> sprites = new HashMap<>();
+        sprites.put(EvolutionType.BABY,       R.drawable.baby_happy_1);
+        sprites.put(EvolutionType.TEEN_MEW,   R.drawable.mew_happy_2);
+        sprites.put(EvolutionType.TEEN_ART,   R.drawable.artsy_happy_1);
+        sprites.put(EvolutionType.TEEN_TIDES, R.drawable.tides_happy_1);
+        sprites.put(EvolutionType.ADULT_MEW,  R.drawable.mew_adult_happy_1);
+        sprites.put(EvolutionType.ADULT_ART,  R.drawable.artsy_adult_happy_1);
+        sprites.put(EvolutionType.ADULT_MER,  R.drawable.mer_adult_happy_1);
+
+        for (GalleryEntry entry : entries) {
+            if (entry.creatureId <= 0 || entry.creatureId >= types.length) continue;
+
+            EvolutionType type = types[entry.creatureId];
+            Integer viewId = imageViewIds.get(type);
+            if (viewId == null) continue;
+
+            ImageView img = findViewById(viewId);
+            if (img == null) continue;
+
+            if (entry.isUnlocked) {
+                Integer sprite = sprites.get(type);
+                if (sprite != null) img.setImageResource(sprite);
+            }
+        }
     }
 }

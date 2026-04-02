@@ -16,7 +16,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "blobbugotchi.db";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 4;
 
     // Nombres de tablas y columnas
     private static final String TABLE_BLOBBU  = "blobbu";
@@ -108,10 +108,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Migración de v2 a v3: añadir la columna previousEvolutionType sin borrar datos
         if (oldVersion < 3) {
             db.execSQL("ALTER TABLE " + TABLE_BLOBBU +
                     " ADD COLUMN " + COL_PREV_EVOLUTION + " TEXT");
+        }
+        if (oldVersion < 4) {
+            db.execSQL("ALTER TABLE " + TABLE_CONFIG +
+                    " ADD COLUMN " + COL_LAST_EVOLUTION_TS + " INTEGER DEFAULT "
+                    + System.currentTimeMillis());
         }
     }
 
@@ -314,5 +318,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return Blobbu.fromDatabase(name, EvolutionType.valueOf(evolutionStr),
                 prevEvolution, happyLvl, hungryLvl, sleepinessLvl,
                 careMistakes, timeTogether, maxScore);
+    }
+
+    public void ensureGalleryRows() {
+        SQLiteDatabase db = getWritableDatabase();
+        for (int i = 1; i < EvolutionType.values().length; i++) {
+            // INSERT OR IGNORE no falla si ya existe (UNIQUE en creatureId)
+            db.execSQL("INSERT OR IGNORE INTO " + TABLE_GALLERY + " (" +
+                    COL_CREATURE_ID + ", " + COL_IS_UNLOCKED + ") VALUES (" + i + ", 0)");
+        }
+    }
+
+    // Para poder reiniciar la partida
+    public void resetAll() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_BLOBBU);
+        db.execSQL("DELETE FROM " + TABLE_GALLERY);
+        for (int i = 1; i < EvolutionType.values().length; i++) {
+            db.execSQL("INSERT INTO " + TABLE_GALLERY +
+                    " (creatureId, isUnlocked) VALUES (" + i + ", 0)");
+        }
+        // Sin tocar config por compatibilidad
     }
 }

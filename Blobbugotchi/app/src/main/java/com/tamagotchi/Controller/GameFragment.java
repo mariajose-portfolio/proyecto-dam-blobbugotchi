@@ -72,7 +72,15 @@ public class GameFragment extends Fragment {
             if (!isSleeping) renderBlobbu(blobbu);
         });
 
-        Blobbu blobbu = gameController.dbHelper.getBlobbu();
+        gameController.getEvolutionManager().setOnEvolutionListener(newType -> {
+            currentPhase = newType;
+            gameController.dbHelper.unlockCreature(newType.ordinal());
+            requireActivity().runOnUiThread(() -> playBlobbuAnimation());
+        });
+
+        gameController.dbHelper.ensureGalleryRows();
+
+        this.blobbu = gameController.dbHelper.getBlobbu();
         if (blobbu != null && blobbu.getEvolutionType() != EvolutionType.EGG) {
             // El blobbu ya ha pasado del huevo, nos aseguramos de que esté desbloqueado
             gameController.dbHelper.unlockCreature(blobbu.getEvolutionType().ordinal());
@@ -100,21 +108,15 @@ public class GameFragment extends Fragment {
     // INICIO DEL JUEGO
     private void startGame() {
         isSleeping = false;
-
-        // Comprobar si ya hay un Blobbu guardado en la BD
         Blobbu savedBlobbu = gameController.getBlobbu();
 
-        if (savedBlobbu != null) {
-            // En caso de habernacido el Blobbu en la sesión anterior
-            // restaura el estado directamente sin pasar por el huevo
+        if (savedBlobbu != null && savedBlobbu.getEvolutionType() != EvolutionType.EGG) {
             blobbu = savedBlobbu;
-
-            // TODO: usar el evolutionType real cuando haya más fases
-            currentPhase = EvolutionType.BABY;
+            currentPhase = blobbu.getEvolutionType(); // ← usa el tipo real, no hardcodeado
             render();
         }
         else {
-            // Primera vez — empezar desde el huevo
+            // Primera vez o viene del huevo — empezar desde el huevo
             egg = new Egg();
             blobbu = null;
             currentPhase = EvolutionType.EGG;
@@ -134,21 +136,17 @@ public class GameFragment extends Fragment {
         handler.postDelayed(() -> {
             egg.hatch();
 
-            // El GameController ya crea y guarda el Blobbu en BD
-            blobbu = gameController.getBlobbu();
+            Blobbu newBlobbu = Blobbu.createBaby();
+            gameController.dbHelper.insertBlobbu(newBlobbu); // inserta fresco
+            newBlobbu.evolve(EvolutionType.BABY);
+            gameController.dbHelper.updateBlobbu(newBlobbu); // guarda BABY
+            gameController.initBlobbu(newBlobbu); // actualiza el singleton
+            gameController.dbHelper.unlockCreature(EvolutionType.BABY.ordinal());
+
+            blobbu = newBlobbu;
             currentPhase = EvolutionType.BABY;
             isSleeping = false;
-
-            // Guardar que el Blobbu ya nació
             gameController.saveProgress();
-
-            // Cuando el huevo eclosiona:
-            blobbu.evolve(EvolutionType.BABY);
-
-            // Desbloquea en la galería al Blobbu
-            gameController.dbHelper.unlockCreature(EvolutionType.BABY.ordinal());
-            gameController.dbHelper.updateBlobbu(blobbu);
-
             render();
         }, 2000);
     }
@@ -219,7 +217,7 @@ public class GameFragment extends Fragment {
             SoundManager.getInstance(requireContext()).playSleepBGM();
             screenBackground.setImageResource(R.drawable.screen_background_night);
             petImage.setColorFilter(NIGHT_FILTER_COLOR, PorterDuff.Mode.SRC_ATOP);
-            playBabyAnimation();
+            playBlobbuAnimation();
             renderBlobbu(blobbu);
         }
     }
@@ -228,8 +226,9 @@ public class GameFragment extends Fragment {
     private void render() {
         if (currentPhase == EvolutionType.EGG) {
             playEggIdleAnimation();
-        } else {
-            playBabyAnimation();
+        }
+        else {
+            playBlobbuAnimation();
             renderBlobbu(blobbu);
         }
     }
@@ -238,7 +237,7 @@ public class GameFragment extends Fragment {
         if (happyBar != null) happyBar.setProgress(blobbu.getHappyLvl());
         if (hungerBar != null) hungerBar.setHunger(scaleToIcons(blobbu.getHungryLvl()));
         if (sleepBar != null) sleepBar.setSleep(scaleToIcons(blobbu.getSleepinessLvl()));
-        if (currentPhase != EvolutionType.EGG) playBabyAnimation();
+        if (currentPhase != EvolutionType.EGG) playBlobbuAnimation();
     }
 
     private int scaleToIcons(int value) {
@@ -260,20 +259,9 @@ public class GameFragment extends Fragment {
     /**
      * Selecciona y reproduce la animación del bebé según su estado actual
      */
-    private void playBabyAnimation() {
-        int animRes;
-        BlobbuState state = blobbu.getCurrentState();
-
-        switch (state) {
-            case HAPPY: animRes = R.drawable.anim_baby_happy; break;
-            case SAD: animRes = R.drawable.anim_baby_sad; break;
-            case HUNGRY: animRes = R.drawable.anim_baby_hungry; break;
-            case EATING: animRes = R.drawable.anim_baby_eating; break;
-            case SLEEPING: animRes = R.drawable.anim_baby_sleep; break;
-            case POMODORO: animRes = R.drawable.anim_baby_reading; break;
-            default: animRes = R.drawable.anim_baby_neutral;
-        }
-
+    private void playBlobbuAnimation() {
+        if (blobbu == null) return;
+        int animRes = BlobbuAnimator.getAnimationRes(currentPhase, blobbu.getCurrentState());
         petImage.setImageResource(animRes);
         startAnimation();
     }
@@ -294,7 +282,7 @@ public class GameFragment extends Fragment {
     public void startPomodoroAnimation() {
         if (blobbu == null || currentPhase == EvolutionType.EGG) return;
         blobbu.setState(BlobbuState.POMODORO);
-        playBabyAnimation();
+        playBlobbuAnimation();
     }
 
     public void stopPomodoroAnimation() {

@@ -48,7 +48,7 @@
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:background="@drawable/btn_small"
-            android:src="@drawable/ic_play"
+            android:src="@drawable/btn_play"
             android:scaleType="fitCenter"
             android:padding="8dp"
             android:contentDescription="Jugar"/>
@@ -72,11 +72,11 @@
         android:layout_margin="8dp">
 
         <ImageButton
-            android:id="@+id/btn_pomodoro_action"
+            android:id="@+id/btn_pomodoro"
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:background="@drawable/btn_small"
-            android:src="@drawable/btn_time"
+            android:src="@drawable/btn_pomodoro"
             android:scaleType="fitCenter"
             android:padding="8dp"
             android:contentDescription="Pomodoro"/>
