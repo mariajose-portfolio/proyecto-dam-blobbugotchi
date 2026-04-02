@@ -5,6 +5,7 @@ import android.content.Context;
 import com.tamagotchi.DataLayer.DatabaseHelper;
 import com.tamagotchi.Model.Blobbu.Blobbu;
 import com.tamagotchi.Model.Blobbu.BlobbuState;
+import com.tamagotchi.Model.Blobbu.EvolutionType;
 
 public class GameController {
 
@@ -12,7 +13,8 @@ public class GameController {
     private Blobbu blobbu;
     private StatsDegradationManager degradationManager;
     private boolean isPomodoroStarted = false;
-    private DatabaseHelper dbHelper;
+    public DatabaseHelper dbHelper;
+    private EvolutionManager evolutionManager;
 
     private GameController(Context context) {
         dbHelper = DatabaseHelper.getInstance(context);
@@ -27,6 +29,8 @@ public class GameController {
         }
 
         degradationManager = new StatsDegradationManager(blobbu);
+
+        evolutionManager = new EvolutionManager(dbHelper);
     }
 
     public static GameController getInstance(Context context) {
@@ -98,8 +102,8 @@ public class GameController {
      */
     public void completePomodoro(double hoursSpent) {
         if (blobbu == null) return;
-        blobbu.play(5);                        // Sube felicidad por completar
-        blobbu.addTimeTogether(hoursSpent);    // Acumula tiempo juntos
+        blobbu.play(5); // Sube felicidad por completar
+        blobbu.addTimeTogether(hoursSpent); // Acumula tiempo juntos
         setPomodoroState(false);
         saveProgress();
         dbHelper.savePomodoroTime(hoursSpent);
@@ -120,10 +124,11 @@ public class GameController {
 
     /**
      * Comprueba si el Blobbu debe evolucionar
-     * TODO: delegar en EvolutionManager cuando esté implementado
+     * Llamar al abrir la app y cada cierto tiempo
      */
-    public void checkEvolution() {
-        if (blobbu != null) blobbu.passTime();
+    public boolean checkEvolution() {
+        if (blobbu == null) return false;
+        return evolutionManager.checkEvolution(blobbu);
     }
 
     // --- GESTIÓN DE LA PERSISTENCIA ---

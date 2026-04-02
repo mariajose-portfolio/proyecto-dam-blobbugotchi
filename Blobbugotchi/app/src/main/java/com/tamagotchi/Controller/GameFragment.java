@@ -64,13 +64,25 @@ public class GameFragment extends Fragment {
         // Callback del tick — solo actualiza la UI
         degradationManager.setOnTickCallback(() -> {
             if (blobbu == null) return;
+
             if (gameController.isPomodoroStarted()) {
                 blobbu.setState(BlobbuState.POMODORO);
             }
+
             if (!isSleeping) renderBlobbu(blobbu);
         });
 
+        Blobbu blobbu = gameController.dbHelper.getBlobbu();
+        if (blobbu != null && blobbu.getEvolutionType() != EvolutionType.EGG) {
+            // El blobbu ya ha pasado del huevo, nos aseguramos de que esté desbloqueado
+            gameController.dbHelper.unlockCreature(blobbu.getEvolutionType().ordinal());
+        }
+
         startGame();
+
+        if (gameController.checkEvolution()) {
+            // Reproducir animación de evolución
+        }
     }
 
     @Override
@@ -111,9 +123,9 @@ public class GameFragment extends Fragment {
         }
     }
 
-    // FASE HUEVO
+    // FASE HUEVO, nace al pasar 20 segundos
     private void startEggTimer() {
-        handler.postDelayed(this::hatchEgg, 30_000);
+        handler.postDelayed(this::hatchEgg, 20_000);
     }
 
     private void hatchEgg() {
@@ -129,6 +141,14 @@ public class GameFragment extends Fragment {
 
             // Guardar que el Blobbu ya nació
             gameController.saveProgress();
+
+            // Cuando el huevo eclosiona:
+            blobbu.evolve(EvolutionType.BABY);
+
+            // Desbloquea en la galería al Blobbu
+            gameController.dbHelper.unlockCreature(EvolutionType.BABY.ordinal());
+            gameController.dbHelper.updateBlobbu(blobbu);
+
             render();
         }, 2000);
     }

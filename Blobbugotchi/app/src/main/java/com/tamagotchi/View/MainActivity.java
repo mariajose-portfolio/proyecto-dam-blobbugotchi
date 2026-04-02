@@ -10,8 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.tamagotchi.Controller.SoundManager;
 import com.tamagotchi.DataLayer.DatabaseHelper;
 import com.tamagotchi.Model.Config.Configuration;
@@ -21,8 +19,8 @@ import android.widget.PopupWindow;
 import com.tamagotchi.Model.Blobbu.BlobbuAction;
 
 public class MainActivity extends BaseActivity {
-    private LinearLayout statsBars, menuButtons;
-    private ImageButton btn_menu, btn_accept, btn_cancel;
+    private LinearLayout statsBars;
+    private ImageButton btn_menu, btn_actions, btn_cancel;
     private GameFragment gameFragment;
     private PopupWindow actionsPopup;
 
@@ -44,24 +42,16 @@ public class MainActivity extends BaseActivity {
         }
 
         // Barras de estadísticas del blobbu
-        statsBars   = findViewById(R.id.statsBars);
-        menuButtons = findViewById(R.id.menuButtons);
+        statsBars = findViewById(R.id.statsBars);
 
         // Botones de la carcasa del tamagotchi
-        btn_menu   = findViewById(R.id.btn_menu);
-        btn_accept = findViewById(R.id.btn_accept);
+        btn_menu = findViewById(R.id.btn_menu);
+        btn_actions = findViewById(R.id.btn_actions);
         btn_cancel = findViewById(R.id.btn_cancel);
 
         btn_menu.setOnClickListener(v -> showStats());
-        btn_accept.setOnClickListener(v -> toggleActionsPopup());
+        btn_actions.setOnClickListener(v -> toggleActionsPopup());
         btn_cancel.setOnClickListener(v -> hideStats());
-
-        // Botón del pomodoro
-        ImageButton pomodoro = findViewById(R.id.btn_pomodoro);
-        pomodoro.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, PomodoroActivity.class);
-            startActivity(intent);
-        });
 
         // Botón de la configuración
         ImageButton config = findViewById(R.id.btn_config);
@@ -74,10 +64,6 @@ public class MainActivity extends BaseActivity {
     private void showStats() {
         if (gameFragment != null && gameFragment.isBlobbuAlive()) {
             statsBars.setVisibility(View.VISIBLE);
-            menuButtons.setVisibility(View.VISIBLE);
-        }
-        else{
-            menuButtons.setVisibility(View.VISIBLE);
         }
     }
 
@@ -132,8 +118,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void hideStats() {
-        statsBars.setVisibility(View.GONE);
-        menuButtons.setVisibility(View.GONE);
+        statsBars.setVisibility(View.INVISIBLE);
     }
 
     @Override

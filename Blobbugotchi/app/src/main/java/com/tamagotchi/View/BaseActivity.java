@@ -1,6 +1,11 @@
 package com.tamagotchi.View;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.tamagotchi.Controller.GameController;
 import com.tamagotchi.Controller.SoundManager;
@@ -10,10 +15,24 @@ import com.tamagotchi.Model.Config.Configuration;
 public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        enableImmersiveMode();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         // Guardar el estado del Blobbu automáticamente al ir a segundo plano
         GameController.getInstance(this).saveProgress();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Volver a aplicar al regresar desde otra app, ya que Android
+        // puede restaurar las barras al volver al primer plano
+        enableImmersiveMode();
     }
 
     @Override
@@ -22,6 +41,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         // Guardar configuración de volumen al salir de cualquier pantalla
         saveConfiguration();
     }
+
+    /**
+     * Activa el modo pantalla completa ocultando la barra de estado y navegación.
+     * Al deslizar desde el borde reaparecen temporalmente y vuelven a ocultarse solas.
+     */
+    private void enableImmersiveMode() {
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        WindowInsetsControllerCompat controller = new WindowInsetsControllerCompat(
+                getWindow(), getWindow().getDecorView());
+        controller.hide(WindowInsetsCompat.Type.statusBars() |
+                        WindowInsetsCompat.Type.navigationBars());
+        controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+    }
+
 
     /**
      * Guarda la configuración de audio actual en la BD
@@ -35,6 +69,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 sm.getSfxVolume(),
                 sm.getMasterVolume()
         );
+
         DatabaseHelper.getInstance(this).saveConfiguration(config);
     }
 }

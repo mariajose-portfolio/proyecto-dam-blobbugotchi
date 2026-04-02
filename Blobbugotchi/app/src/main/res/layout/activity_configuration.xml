@@ -197,7 +197,7 @@
             android:fontFamily="@font/arista_pro_alternate_bold"
             android:textStyle="bold"
             android:backgroundTint="@color/dark_blue"
-            android:textColor="@color/light_blue"/>
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 

@@ -16,7 +16,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "blobbugotchi.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 3;
 
     // Nombres de tablas y columnas
     private static final String TABLE_BLOBBU  = "blobbu";
@@ -27,6 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_ID = "id";
     private static final String COL_NAME = "name";
     private static final String COL_EVOLUTION = "evolutionType";
+    private static final String COL_PREV_EVOLUTION = "previousEvolutionType";
     private static final String COL_HAPPY = "happyLvl";
     private static final String COL_HUNGRY = "hungryLvl";
     private static final String COL_SLEEPINESS  = "sleepinessLvl";
@@ -44,6 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_ME_VOLUME = "meVolume";
     private static final String COL_SE_VOLUME = "seVolume";
     private static final String COL_MASTER_VOLUME = "masterVolume";
+    private static final String COL_LAST_EVOLUTION_TS = "lastEvolutionTs";
+
 
     private static DatabaseHelper instance;
 
@@ -63,10 +66,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Tabla Blobbu
+        // previousEvolutionType puede ser NULL (el bebé aún no ha evolucionado antes)
         db.execSQL("CREATE TABLE " + TABLE_BLOBBU + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_NAME + " TEXT, " +
                 COL_EVOLUTION + " TEXT, " +
+                COL_PREV_EVOLUTION + " TEXT, " +
                 COL_HAPPY + " INTEGER, " +
                 COL_HUNGRY + " INTEGER, " +
                 COL_SLEEPINESS + " INTEGER, " +
@@ -87,10 +92,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_BGS_VOLUME + " REAL, " +
                 COL_ME_VOLUME + " REAL, " +
                 COL_SE_VOLUME + " REAL, " +
-                COL_MASTER_VOLUME + " REAL)");
+                COL_MASTER_VOLUME + " REAL, " +
+                COL_LAST_EVOLUTION_TS + " INTEGER)");  // Tiempo entre evoluciones
 
-        // Insertar configuración por defecto
-        db.execSQL("INSERT INTO " + TABLE_CONFIG + " VALUES (1, 1.0, 1.0, 1.0, 1.0, 1.0)");
+        db.execSQL("INSERT INTO " + TABLE_CONFIG + " VALUES (1, 1.0, 1.0, 1.0, 1.0, 1.0, " +
+                System.currentTimeMillis() + ")");
 
         // Insertar todas las criaturas de la galería como bloqueadas por defecto
         // El ID corresponde al ordinal del EvolutionType (sin EGG=0)
@@ -102,10 +108,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOBBU);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GALLERY);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONFIG);
-        onCreate(db);
+        // Migración de v2 a v3: añadir la columna previousEvolutionType sin borrar datos
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE " + TABLE_BLOBBU +
+                    " ADD COLUMN " + COL_PREV_EVOLUTION + " TEXT");
+        }
     }
 
     // --- BLOBBU ---
@@ -199,6 +206,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return entries;
     }
 
+    /**
+     * Guarda el timestamp (ms epoch) del momento de la última evolución.
+     */
+    public void saveLastEvolutionTimestamp(long timestamp) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_LAST_EVOLUTION_TS, timestamp);
+        db.update(TABLE_CONFIG, values, COL_ID + "=1", null);
+    }
+
+    /**
+     * Recupera el timestamp de la última evolución.
+     * Devuelve el momento actual si no hay ninguno guardado (primera vez).
+     */
+    public long getLastEvolutionTimestamp() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_CONFIG,
+                new String[]{COL_LAST_EVOLUTION_TS},
+                COL_ID + "=1", null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            long ts = cursor.getLong(cursor.getColumnIndexOrThrow(COL_LAST_EVOLUTION_TS));
+            cursor.close();
+            return ts;
+        }
+        return System.currentTimeMillis();
+    }
+
     // --- CONFIGURACIÓN ---
 
     /**
@@ -244,6 +279,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COL_NAME, blobbu.getName());
         values.put(COL_EVOLUTION, blobbu.getEvolutionType().name());
+        // previousEvolutionType puede ser null si el Blobbu nunca ha evolucionado antes
+        values.put(COL_PREV_EVOLUTION,
+                blobbu.getPreviousEvolutionType() != null
+                        ? blobbu.getPreviousEvolutionType().name()
+                        : null);
         values.put(COL_HAPPY, blobbu.getHappyLvl());
         values.put(COL_HUNGRY, blobbu.getHungryLvl());
         values.put(COL_SLEEPINESS, blobbu.getSleepinessLvl());
@@ -263,7 +303,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         double timeTogether = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_TIME_TOGETHER));
         int maxScore = cursor.getInt(cursor.getColumnIndexOrThrow(COL_MAX_SCORE));
 
+        // previousEvolutionType es nullable: puede no existir si el Blobbu aún es bebé
+        int prevColIndex = cursor.getColumnIndex(COL_PREV_EVOLUTION);
+        EvolutionType prevEvolution = null;
+
+        if (prevColIndex != -1 && !cursor.isNull(prevColIndex)) {
+            prevEvolution = EvolutionType.valueOf(cursor.getString(prevColIndex));
+        }
+
         return Blobbu.fromDatabase(name, EvolutionType.valueOf(evolutionStr),
-                happyLvl, hungryLvl, sleepinessLvl, careMistakes, timeTogether, maxScore);
+                prevEvolution, happyLvl, hungryLvl, sleepinessLvl,
+                careMistakes, timeTogether, maxScore);
     }
 }

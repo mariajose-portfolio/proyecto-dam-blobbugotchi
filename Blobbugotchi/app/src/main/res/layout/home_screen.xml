@@ -3,18 +3,33 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_blue"
-    android:layout_gravity="center"
-    android:gravity="center">
+    android:background="@color/light_blue">
 
-    <!--  BARRAS DE ESTADO -->
+    <!-- BOTÓN DE CONFIGURACIÓN -->
+    <ImageButton
+        android:id="@+id/btn_config"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_button_setting"
+        android:src="@drawable/ic_menu"
+        android:scaleType="fitCenter"
+        android:padding="8dp"
+        android:contentDescription="Menú"/>
+
+
+    <!-- BARRAS DE ESTADO -->
     <LinearLayout
         android:id="@+id/statsBars"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_below="@id/btn_config"
         android:padding="16dp"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <!-- Felicidad LVL -->
         <LinearLayout
@@ -92,14 +107,13 @@
 
     </LinearLayout>
 
-    <!-- CARCASA TAMAGOTCHI  -->
+    <!-- CARCASA TAMAGOTCHI -->
     <FrameLayout
         android:id="@+id/deviceContainer"
         android:layout_width="380dp"
         android:layout_height="450dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/statsBars"
-        android:layout_marginTop="24dp">
+        android:layout_centerInParent="true"
+        android:layout_below="@id/statsBars">
 
         <!-- Fondo -->
         <ImageView
@@ -146,7 +160,7 @@
                 android:background="@drawable/btn_small" />
 
             <ImageButton
-                android:id="@+id/btn_accept"
+                android:id="@+id/btn_actions"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_margin="12dp"
@@ -160,31 +174,5 @@
                 android:background="@drawable/btn_small" />
         </LinearLayout>
     </FrameLayout>
-
-    <!-- BOTONES DE MENÚ -->
-    <LinearLayout
-        android:id="@+id/menuButtons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/deviceContainer"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="16dp"
-        android:visibility="gone">
-
-        <ImageButton
-            android:id="@+id/btn_pomodoro"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="8dp"
-            android:background="@drawable/btn_time" />
-
-        <ImageButton
-            android:id="@+id/btn_config"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/btn_config" />
-    </LinearLayout>
 
 </RelativeLayout>

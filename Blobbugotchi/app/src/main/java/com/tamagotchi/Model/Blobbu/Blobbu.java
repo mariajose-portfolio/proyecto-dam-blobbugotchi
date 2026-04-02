@@ -13,6 +13,7 @@ public class Blobbu {
 
     private BlobbuState currentState; // Control del estado
     private EvolutionType evolutionType;
+    private EvolutionType previousEvolutionType;
 
     // Umbrales de estado
     private static final int CRITICAL = 20;
@@ -54,6 +55,10 @@ public class Blobbu {
 
     public double getTimeTogether() {
         return timeTogether;
+    }
+
+    public EvolutionType getPreviousEvolutionType() {
+        return previousEvolutionType;
     }
 
     public BlobbuState getCurrentState() {
@@ -178,6 +183,29 @@ public class Blobbu {
 
         blobbu.updateState();
 
+        return blobbu;
+    }
+
+    public void evolve(EvolutionType newType) {
+        this.previousEvolutionType = this.evolutionType;
+        this.evolutionType = newType;
+        this.careMistakes = 0;
+        updateState();
+    }
+
+    public static Blobbu fromDatabase(String name, EvolutionType evolutionType,
+                                      EvolutionType prevEvolutionType, int happyLvl, int hungryLvl,
+                                      int sleepinessLvl, int careMistakes, double timeTogether, int maxScore) {
+        Blobbu blobbu = new Blobbu(name);
+        blobbu.evolutionType = evolutionType;
+        blobbu.previousEvolutionType = prevEvolutionType;
+        blobbu.happyLvl = happyLvl;
+        blobbu.hungryLvl = hungryLvl;
+        blobbu.sleepinessLvl = sleepinessLvl;
+        blobbu.careMistakes = careMistakes;
+        blobbu.timeTogether = timeTogether;
+        blobbu.maxScore = maxScore;
+        blobbu.updateState();
         return blobbu;
     }
 
