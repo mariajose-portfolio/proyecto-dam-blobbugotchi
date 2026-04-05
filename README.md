@@ -1,6 +1,6 @@
 # 🐾 Blobbugotchi
 
-Blobbugotchi es una aplicación Android inspirada en los Tamagotchi clásicos. Cuida a tu Blobbu alimentándolo, jugando con él y dejándolo descansar. Usa el temporizador Pomodoro integrado para hacerle compañía mientras trabajas o estudias, y descubre todas las evoluciones posibles de tu mascota virtual.
+Blobbugotchi es una aplicación Android inspirada en los Tamagotchi clásicos. Cuida a tu Blobbu alimentándolo, jugando con él y dejándolo descansar. Usa el temporizador Pomodoro integrado para hacerte compañía mientras trabajas o estudias, y descubre todas las evoluciones posibles de tu mascota virtual.
 
 Proyecto Intermodular de Grado Superior en Desarrollo de Aplicaciones Multiplataforma (DAM).
 
@@ -13,13 +13,13 @@ Proyecto Intermodular de Grado Superior en Desarrollo de Aplicaciones Multiplata
 - **UI:** XML layouts + Custom Views
 - **Base de datos:** SQLite (local)
 - **Mínimo SDK:** Android 8.0 (API 26)
-- **Target SDK:** Android 14 (API 34)
+- **Target SDK:** Android 14 (API 36)
 
 ---
 
 ## ✅ Requisitos previos
 
-- [Android Studio](https://developer.android.com/studio) (versión Hedgehog o superior)
+- [Android Studio](https://developer.android.com/studio) (versión narwhal o superior)
 - JDK 11 o superior
 - Un dispositivo Android o emulador con API 26+
 
