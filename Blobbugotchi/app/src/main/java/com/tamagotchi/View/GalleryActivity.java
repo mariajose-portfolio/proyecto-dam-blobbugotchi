@@ -40,23 +40,12 @@ public class GalleryActivity extends BaseActivity {
     private void syncGalleryWithCurrentBlobbu(DatabaseHelper db) {
         Blobbu blobbu = db.getBlobbu();
 
-        Toast.makeText(this, "Blobbu: " + (blobbu == null ? "NULL" : blobbu.getEvolutionType().name()), Toast.LENGTH_LONG).show();
-
         if (blobbu == null) return;
 
         EvolutionType current = blobbu.getEvolutionType();
 
         if (current != EvolutionType.EGG) {
             db.unlockCreature(current.ordinal());
-            Toast.makeText(this, "Desbloqueando ordinal: " + current.ordinal() + " (" + current.name() + ")", Toast.LENGTH_LONG).show();
-        }
-
-        // Verificar inmediatamente si el unlock funcionó
-        List<GalleryEntry> check = db.getGallery();
-        for (GalleryEntry e : check) {
-            if (e.creatureId == current.ordinal()) {
-                Toast.makeText(this, "Tras unlock -> creatureId=" + e.creatureId + " isUnlocked=" + e.isUnlocked, Toast.LENGTH_LONG).show();
-            }
         }
 
         if (current != EvolutionType.EGG && current != EvolutionType.BABY) {
@@ -75,23 +64,23 @@ public class GalleryActivity extends BaseActivity {
         EvolutionType[] types = EvolutionType.values();
 
         Map<EvolutionType, Integer> imageViewIds = new HashMap<>();
-        imageViewIds.put(EvolutionType.BABY,         R.id.img_baby);
-        imageViewIds.put(EvolutionType.TEEN_MEW,     R.id.img_teen_mew);
-        imageViewIds.put(EvolutionType.TEEN_ART,     R.id.img_teen_art);
-        imageViewIds.put(EvolutionType.TEEN_TIDES,   R.id.img_teen_tides);
-        imageViewIds.put(EvolutionType.ADULT_MEW,    R.id.img_adult_mew);
-        imageViewIds.put(EvolutionType.ADULT_ART,    R.id.img_adult_art);
-        imageViewIds.put(EvolutionType.ADULT_MER,    R.id.img_adult_mer);
+        imageViewIds.put(EvolutionType.BABY, R.id.img_baby);
+        imageViewIds.put(EvolutionType.TEEN_MEW, R.id.img_teen_mew);
+        imageViewIds.put(EvolutionType.TEEN_ART, R.id.img_teen_art);
+        imageViewIds.put(EvolutionType.TEEN_TIDES, R.id.img_teen_tides);
+        imageViewIds.put(EvolutionType.ADULT_MEW, R.id.img_adult_mew);
+        imageViewIds.put(EvolutionType.ADULT_ART, R.id.img_adult_art);
+        imageViewIds.put(EvolutionType.ADULT_MER, R.id.img_adult_mer);
         imageViewIds.put(EvolutionType.ADULT_SECRET, R.id.img_adult_secret);
 
         Map<EvolutionType, Integer> sprites = new HashMap<>();
-        sprites.put(EvolutionType.BABY,       R.drawable.baby_happy_1);
-        sprites.put(EvolutionType.TEEN_MEW,   R.drawable.mew_happy_2);
-        sprites.put(EvolutionType.TEEN_ART,   R.drawable.artsy_happy_1);
+        sprites.put(EvolutionType.BABY, R.drawable.baby_happy_1);
+        sprites.put(EvolutionType.TEEN_MEW, R.drawable.mew_happy_2);
+        sprites.put(EvolutionType.TEEN_ART, R.drawable.artsy_happy_1);
         sprites.put(EvolutionType.TEEN_TIDES, R.drawable.tides_happy_1);
-        sprites.put(EvolutionType.ADULT_MEW,  R.drawable.mew_adult_happy_1);
-        sprites.put(EvolutionType.ADULT_ART,  R.drawable.artsy_adult_happy_1);
-        sprites.put(EvolutionType.ADULT_MER,  R.drawable.mer_adult_happy_1);
+        sprites.put(EvolutionType.ADULT_MEW, R.drawable.mew_adult_happy_1);
+        sprites.put(EvolutionType.ADULT_ART, R.drawable.artsy_adult_happy_1);
+        sprites.put(EvolutionType.ADULT_MER, R.drawable.mer_adult_happy_1);
 
         for (GalleryEntry entry : entries) {
             if (entry.creatureId <= 0 || entry.creatureId >= types.length) continue;

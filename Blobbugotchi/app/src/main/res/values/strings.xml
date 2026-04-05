@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tamagotchi</string>
+    <string name="app_name">Blobbugotchi</string>
     <string name="title_activity_configuration">Configuration</string>
 
     <!-- Preference Titles -->

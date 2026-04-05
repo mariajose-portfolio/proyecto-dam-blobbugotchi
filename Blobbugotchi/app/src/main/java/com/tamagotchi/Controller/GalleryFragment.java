@@ -63,30 +63,22 @@ public class GalleryFragment extends Fragment {
         List<GalleryEntry> entries = db.getGallery();
         EvolutionType[] types = EvolutionType.values();
 
-        Log.d("GALLERY", "Total entradas en BD: " + entries.size());
-
         for (GalleryEntry entry : entries) {
             // entry.creatureId == ordinal del EvolutionType
             if (entry.creatureId <= 0 || entry.creatureId >= types.length) {
-                Log.d("GALLERY", "  → SALTADA (fuera de rango)");
                 continue;
             }
 
             EvolutionType type = types[entry.creatureId];
-            Log.d("GALLERY", "  → EvolutionType resuelto: " + type);
-
             Integer imageViewId = IMAGE_VIEW_IDS.get(type);
-            Log.d("GALLERY", "  → viewId: " + imageViewId);
 
             if (imageViewId == null) continue;
 
             ImageView img = view.findViewById(imageViewId);
-            Log.d("GALLERY", "  → ImageView encontrado: " + (img != null));
             if (img == null) continue;
 
             if (entry.isUnlocked) {
                 Integer sprite = SPRITES.get(type);
-                Log.d("GALLERY", "  → Sprite a cargar: " + sprite);
                 if (sprite != null) img.setImageResource(sprite);
             }
             // Si está bloqueado, el layout ya pone spr_locked por defecto,

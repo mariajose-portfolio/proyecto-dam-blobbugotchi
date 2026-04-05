@@ -24,6 +24,7 @@ public class StatsDegradationManager {
                 if (!isPomodoroActive) {
                     statsDegradation();
                 }
+
                 if (onTickCallback != null) onTickCallback.run();
             }
 
@@ -69,7 +70,7 @@ public class StatsDegradationManager {
         }
     }
 
-    // Pausa la degradación (ej: mientras duerme)
+    // Pausa la degradación
     public void pause() {
         running = false;
     }
@@ -79,7 +80,7 @@ public class StatsDegradationManager {
         running = true;
     }
 
-    // Para el timer completamente (ej: al salir de la app)
+    // Para el timer completamente
     public void stop() {
         running = false;
         handler.removeCallbacks(tickRunnable);

@@ -195,9 +195,10 @@ public class PomodoroActivity extends BaseActivity {
     private void notifyStudyingState(boolean studying) {
         GameFragment gameFragment = (GameFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.gameFragmentContainer);
+
         if (gameFragment != null) {
             if (studying) gameFragment.startPomodoroAnimation();
-            else          gameFragment.stopPomodoroAnimation();
+            else gameFragment.stopPomodoroAnimation();
         }
     }
 
@@ -206,6 +207,7 @@ public class PomodoroActivity extends BaseActivity {
             if (countDownTimer != null) countDownTimer.cancel();
             pomodoro.cancelTimer();
             finish();
+
             return;
         }
 

@@ -67,16 +67,6 @@
                     android:layout_gravity="center"
                     android:scaleType="fitCenter"
                     android:src="@drawable/spr_locked" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:text="?"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="2dp"/>
             </FrameLayout>
 
             <FrameLayout
@@ -93,16 +83,6 @@
                     android:layout_gravity="center"
                     android:scaleType="fitCenter"
                     android:src="@drawable/spr_locked" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:text="?"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="2dp"/>
             </FrameLayout>
 
             <FrameLayout
@@ -119,16 +99,6 @@
                     android:layout_gravity="center"
                     android:scaleType="fitCenter"
                     android:src="@drawable/spr_locked" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:text="?"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="2dp"/>
             </FrameLayout>
 
             <FrameLayout
@@ -145,16 +115,6 @@
                     android:layout_gravity="center"
                     android:scaleType="fitCenter"
                     android:src="@drawable/spr_locked" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:text="?"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="2dp"/>
             </FrameLayout>
 
         </LinearLayout>
@@ -179,16 +139,6 @@
                     android:layout_gravity="center"
                     android:scaleType="fitCenter"
                     android:src="@drawable/spr_locked" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:text="?"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="2dp"/>
             </FrameLayout>
 
             <FrameLayout
@@ -205,16 +155,6 @@
                     android:layout_gravity="center"
                     android:scaleType="fitCenter"
                     android:src="@drawable/spr_locked" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:text="?"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="2dp"/>
             </FrameLayout>
 
             <FrameLayout
@@ -231,16 +171,6 @@
                     android:layout_gravity="center"
                     android:scaleType="fitCenter"
                     android:src="@drawable/spr_locked" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:text="?"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="2dp"/>
             </FrameLayout>
 
 
@@ -259,16 +189,6 @@
                     android:layout_gravity="center"
                     android:scaleType="fitCenter"
                     android:src="@drawable/spr_locked" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:text="?"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="2dp"/>
             </FrameLayout>
 
         </LinearLayout>

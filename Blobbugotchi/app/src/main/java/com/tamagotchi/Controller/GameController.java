@@ -32,6 +32,7 @@ public class GameController {
         if (instance == null) {
             instance = new GameController(context.getApplicationContext());
         }
+
         return instance;
     }
 
@@ -77,7 +78,8 @@ public class GameController {
 
         if (active) {
             blobbu.setState(BlobbuState.POMODORO);
-        } else {
+        }
+        else {
             blobbu.updateState();
         }
     }

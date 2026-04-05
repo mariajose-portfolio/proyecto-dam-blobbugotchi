@@ -12,22 +12,14 @@ import java.util.List;
 
 public class ImplEvolutionRule {
 
-    /**
-     * BABY → TEEN
-     * Orden importante: MEW y TIDES primero, ART es el fallback (happyLvl >= 5).
-     */
     public static List<EvolutionRule> getTeenRules() {
         return Arrays.asList(
-                new EvolutionRule(EvolutionType.TEEN_MEW,   minScore(100)),
+                new EvolutionRule(EvolutionType.TEEN_MEW, minScore(100)),
                 new EvolutionRule(EvolutionType.TEEN_TIDES, minTimeTogether(1.0)),
-                new EvolutionRule(EvolutionType.TEEN_ART,   minHappy(5))   // fallback
+                new EvolutionRule(EvolutionType.TEEN_ART, minHappy(5))   // fallback
         );
     }
 
-    /**
-     * TEEN → ADULT
-     * God of Tides va antes que MerFishie porque sus condiciones son un superconjunto.
-     */
     public static List<EvolutionRule> getAdultRules() {
         return Arrays.asList(
                 new EvolutionRule(EvolutionType.ADULT_SECRET,
