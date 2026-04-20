@@ -62,6 +62,7 @@ Proyecto Intermodular de Grado Superior en Desarrollo de Aplicaciones Multiplata
 - **Pantalla de ajustes:** control de volumen general, música y efectos de sonido
 - **Navegación:** menú inferior con acceso a todas las secciones
 - **Orientación bloqueada:** la app siempre se muestra en vertical
+- **Galería:** Sistema de desbloqueo de la galería ligado a las evoluciones conseguidas
 
 ---
 
@@ -86,8 +87,6 @@ Proyecto Intermodular de Grado Superior en Desarrollo de Aplicaciones Multiplata
 - Sistema de evolución: el Blobbu cambia de forma según cómo lo hayas cuidado
 - Persistencia de datos: guardar y cargar el progreso del Blobbu con SQLite
 - Notificaciones: avisar al usuario cuando el Blobbu necesita atención
-- Sistema de desbloqueo de la galería ligado a las evoluciones conseguidas
-- Integración completa del Pomodoro con las estadísticas del Blobbu
 - Minijuego para subir la felicidad
 
 ---

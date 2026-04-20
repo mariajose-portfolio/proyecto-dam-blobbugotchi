@@ -59,7 +59,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MASTER VOLUME"
+            android:text="Volúmen global"
             android:fontFamily="@font/arista_pro_alternate_bold"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -96,14 +96,14 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/light_blue"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
         <!-- MÚSICA -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MUSIC"
+            android:text="Música"
             android:fontFamily="@font/arista_pro_alternate_bold"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -140,14 +140,14 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/light_blue"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
         <!-- EFECTOS DE SONIDO -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SOUND EFFECTS"
+            android:text="Efectos de sonido"
             android:fontFamily="@font/arista_pro_alternate_bold"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -189,10 +189,23 @@
 
         <Button
             android:id="@+id/btn_gallery"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="BLOBBU JOURNAL"
+            android:textSize="20sp"
+            android:fontFamily="@font/arista_pro_alternate_bold"
+            android:textStyle="bold"
+            android:backgroundTint="@color/dark_blue"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/btn_reset"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20px"
+            android:text="REINICIAR"
             android:textSize="20sp"
             android:fontFamily="@font/arista_pro_alternate_bold"
             android:textStyle="bold"

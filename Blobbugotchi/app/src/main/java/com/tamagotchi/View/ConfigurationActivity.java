@@ -48,8 +48,13 @@ public class ConfigurationActivity extends BaseActivity {
                 SoundManager.getInstance(ConfigurationActivity.this)
                         .setMasterVolume(progress / 100f);
             }
+
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                saveConfiguration(); // guardar al soltar
+            }
         });
 
         seekMusic.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -58,8 +63,13 @@ public class ConfigurationActivity extends BaseActivity {
                 SoundManager.getInstance(ConfigurationActivity.this)
                         .setBgmVolume(progress / 100f);
             }
+
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                saveConfiguration();
+            }
         });
 
         seekSfx.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -68,8 +78,26 @@ public class ConfigurationActivity extends BaseActivity {
                 SoundManager.getInstance(ConfigurationActivity.this)
                         .setSfxVolume(progress / 100f);
             }
+
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                saveConfiguration();
+            }
         });
+    }
+
+    private void saveConfiguration() {
+        SoundManager sm = SoundManager.getInstance(this);
+        Configuration config = new Configuration(
+                sm.getBgmVolume(),
+                sm.getBgmVolume(),
+                sm.getBgmVolume(),
+                sm.getSfxVolume(),
+                sm.getMasterVolume()
+        );
+
+        DatabaseHelper.getInstance(this).saveConfiguration(config);
     }
 }

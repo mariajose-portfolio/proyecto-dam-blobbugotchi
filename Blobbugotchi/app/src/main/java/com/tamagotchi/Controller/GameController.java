@@ -21,6 +21,11 @@ public class GameController {
         blobbu = dbHelper.getBlobbu(); // puede ser null
         degradationManager = new StatsDegradationManager(blobbu);
         evolutionManager = new EvolutionManager(dbHelper);
+
+        evolutionManager.setOnEvolutionListener(newType -> {
+            // Desbloquear la criatura en la galería
+            dbHelper.unlockCreature(newType.ordinal());
+        });
     }
 
     public void initBlobbu(Blobbu newBlobbu) {
@@ -93,7 +98,6 @@ public class GameController {
      */
     public void startPomodoro(int minutes) {
         setPomodoroState(true);
-        // TODO: guardar en BD el inicio del pomodoro cuando esté listo
     }
 
     /**

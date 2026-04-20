@@ -239,9 +239,6 @@ public class PomodoroActivity extends BaseActivity {
         pomodoro.cancelTimer();
         btnPlayPause.setImageResource(R.drawable.ic_play);
 
-        // Recompensar al Blobbu
-        gameController.updateStats();
-
         // Mostrar popup de resumen — tiempo completo = totalTimeMillis
         showResultPopup(totalTimeMillis, true);
     }
@@ -270,9 +267,8 @@ public class PomodoroActivity extends BaseActivity {
         int minutes = elapsedSeconds / 60;
         int seconds = elapsedSeconds % 60;
 
-        // Guardar timeTogether en horas decimales en el Blobbu
+        // Calcular horas transcurridas para registrar el tiempo junto al Blobbu
         double hoursSpent = elapsedMillis / 3_600_000.0;
-        gameController.getBlobbu().addTimeTogether(hoursSpent);
 
         // Inflar el layout
         View popupView = LayoutInflater.from(this).inflate(R.layout.popup_pomodoro_result, null);
@@ -291,16 +287,19 @@ public class PomodoroActivity extends BaseActivity {
                 ? "¡Buen trabajo! Tu Blobbu está feliz de haber estudiado contigo."
                 : "Puedes conseguir tus objetivos la próxima vez.");
 
-        // Botón salir
+        // Botón salir — registra el tiempo y cierra
         popupView.findViewById(R.id.btn_exit_pomodoro).setOnClickListener(v -> {
             resultPopup.dismiss();
-            gameController.setPomodoroState(false);
+            if (completed) gameController.completePomodoro(hoursSpent);
+            else gameController.cancelPomodoro(hoursSpent);
             finish();
         });
 
-        // Botón otro pomodoro — abre de nuevo el selector de duración
+        // Botón otro pomodoro — registra el tiempo y abre de nuevo el selector de duración
         popupView.findViewById(R.id.btn_repeat).setOnClickListener(v -> {
             resultPopup.dismiss();
+            if (completed) gameController.completePomodoro(hoursSpent);
+            else gameController.cancelPomodoro(hoursSpent);
 
             // Resetear el timer visualmente
             timeLeftMillis  = totalTimeMillis;

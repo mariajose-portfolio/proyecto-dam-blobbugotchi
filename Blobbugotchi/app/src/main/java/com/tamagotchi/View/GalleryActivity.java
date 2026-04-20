@@ -75,7 +75,7 @@ public class GalleryActivity extends BaseActivity {
 
         Map<EvolutionType, Integer> sprites = new HashMap<>();
         sprites.put(EvolutionType.BABY, R.drawable.baby_happy_1);
-        sprites.put(EvolutionType.TEEN_MEW, R.drawable.mew_happy_2);
+        sprites.put(EvolutionType.TEEN_MEW, R.drawable.mew_happy_1);
         sprites.put(EvolutionType.TEEN_ART, R.drawable.artsy_happy_1);
         sprites.put(EvolutionType.TEEN_TIDES, R.drawable.tides_happy_1);
         sprites.put(EvolutionType.ADULT_MEW, R.drawable.mew_adult_happy_1);
