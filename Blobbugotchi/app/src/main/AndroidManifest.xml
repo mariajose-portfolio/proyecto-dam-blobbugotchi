@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_blobbugotchi_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Tamagotchi">
+        android:theme="@style/Theme.Blobbugotchi">
         <activity
             android:name=".View.GalleryActivity"
             android:exported="false" />

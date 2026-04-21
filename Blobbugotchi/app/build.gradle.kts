@@ -3,12 +3,16 @@ plugins {
 }
 
 android {
-    namespace = "com.tamagotchi"
-    compileSdk = 36
+    namespace = "com.example.blobbugotchi"
+    compileSdk {
+        version = release(36) {
+            minorApiLevel = 1
+        }
+    }
 
     defaultConfig {
-        applicationId = "com.tamagotchi"
-        minSdk = 25
+        applicationId = "com.example.blobbugotchi"
+        minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -32,12 +36,10 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.preference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

@@ -48,7 +48,7 @@
                 android:textSize="60px"
                 android:layout_marginEnd="8dp"/>
 
-            <com.tamagotchi.Model.Stats.HappyProgressBar
+            <com.example.blobbugotchi.Model.Stats.HappyProgressBar
                 android:id="@+id/happyBar"
                 android:layout_width="0dp"
                 android:layout_height="28dp"
@@ -73,7 +73,7 @@
                 android:textSize="60px"
                 android:layout_marginEnd="8dp"/>
 
-            <com.tamagotchi.Model.Stats.HungerIconsView
+            <com.example.blobbugotchi.Model.Stats.HungerIconsView
                 android:id="@+id/hungerBar"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
@@ -98,7 +98,7 @@
                 android:textSize="60px"
                 android:layout_marginEnd="8dp"/>
 
-            <com.tamagotchi.Model.Stats.SleepIconsView
+            <com.example.blobbugotchi.Model.Stats.SleepIconsView
                 android:id="@+id/sleepBar"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
@@ -132,6 +132,17 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:translationY="15dp" />
+
+        <!-- Flash de evolución -->
+        <View
+            android:id="@+id/evolutionFlash"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:translationY="15dp"
+            android:background="@color/white"
+            android:alpha="0"
+            android:visibility="invisible" />
 
         <!-- Carcasa -->
         <ImageView
@@ -174,12 +185,5 @@
                 android:background="@drawable/btn_small" />
         </LinearLayout>
     </FrameLayout>
-
-    <Button
-        android:id="@+id/btn_reset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="RESET"
-        android:layout_gravity="bottom|center"/>
 
 </RelativeLayout>

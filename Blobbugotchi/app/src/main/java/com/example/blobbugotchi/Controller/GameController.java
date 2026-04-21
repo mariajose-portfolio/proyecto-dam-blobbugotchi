@@ -1,0 +1,201 @@
+package com.example.blobbugotchi.Controller;
+
+import android.content.Context;
+
+import com.example.blobbugotchi.DataLayer.DatabaseHelper;
+import com.example.blobbugotchi.Model.Blobbu.Blobbu;
+import com.example.blobbugotchi.Model.Blobbu.BlobbuState;
+import com.example.blobbugotchi.Model.Blobbu.EvolutionType;
+
+
+public class GameController {
+
+    private static GameController instance;
+    private Blobbu blobbu;
+    private StatsDegradationManager degradationManager;
+    private boolean isPomodoroStarted = false;
+    public DatabaseHelper dbHelper;
+    private EvolutionManager evolutionManager;
+
+    private GameController(Context context) {
+        dbHelper = DatabaseHelper.getInstance(context);
+        blobbu = dbHelper.getBlobbu(); // puede ser null
+        degradationManager = new StatsDegradationManager(blobbu);
+        evolutionManager = new EvolutionManager(dbHelper);
+
+        evolutionManager.setOnEvolutionListener(newType -> {
+            // Desbloquear la criatura en la galería
+            dbHelper.unlockCreature(newType.ordinal());
+        });
+    }
+
+    public static GameController getInstance(Context context) {
+        if (instance == null) {
+            instance = new GameController(context.getApplicationContext());
+        }
+
+        return instance;
+    }
+
+    // ---GESTIÓN DE LAS ACCIONES DEL USUARIO ---
+
+    /**
+     * Alimenta al Blobbu y guarda el progreso
+     */
+    public void feedBlobbu() {
+        if (blobbu == null) return;
+        blobbu.eat(20);
+        saveProgress();
+    }
+
+    /**
+     * Hace jugar al Blobbu y guarda el progreso
+     */
+    public void playWithBlobbu() {
+        if (blobbu == null) return;
+        blobbu.play(20);
+        saveProgress();
+    }
+
+    /**
+     * Pone a dormir o despierta al Blobbu y guarda el progreso
+     */
+    public void sleepBlobbu() {
+        if (blobbu == null) return;
+        blobbu.sleep(20);
+        saveProgress();
+    }
+
+    // --- GESTIÓN DEL POMODORO ---
+
+    /**
+     * Activa o desactiva el estado pomodoro del Blobbu
+     */
+    public void setPomodoroState(boolean active) {
+        this.isPomodoroStarted = active;
+        degradationManager.setPomodoroActive(active);
+
+        if (blobbu == null) {
+            return;
+        }
+
+        if (active) {
+            blobbu.setState(BlobbuState.POMODORO);
+        }
+        else {
+            blobbu.updateState();
+        }
+    }
+
+    public boolean isPomodoroStarted() {
+        return isPomodoroStarted;
+    }
+
+    /**
+     * Se llama al arrancar el timer — registra el inicio del pomodoro
+     */
+    public void startPomodoro(int minutes) {
+        setPomodoroState(true);
+    }
+
+    /**
+     * Recompensa al Blobbu al completar el pomodoro y guarda el progreso
+     */
+    public void completePomodoro(double hoursSpent) {
+        if (blobbu == null) return;
+        blobbu.play(5); // Sube felicidad por completar
+        blobbu.addTimeTogether(hoursSpent); // Acumula tiempo juntos
+        setPomodoroState(false);
+        saveProgress();
+        dbHelper.savePomodoroTime(hoursSpent);
+    }
+
+    /**
+     * Registra tiempo parcial al cancelar el pomodoro
+     */
+    public void cancelPomodoro(double hoursSpent) {
+        if (blobbu == null) return;
+        blobbu.addTimeTogether(hoursSpent);
+        setPomodoroState(false);
+        saveProgress();
+        dbHelper.savePomodoroTime(hoursSpent);
+    }
+
+    // --- GESTIÓN DE LA EVOLUCIÓN ---
+
+    /**
+     * Comprueba si el Blobbu debe evolucionar
+     * Llamar al abrir la app y cada cierto tiempo
+     */
+    public boolean checkEvolution() {
+        if (blobbu == null) return false;
+        return evolutionManager.checkEvolution(blobbu);
+    }
+
+    // --- GESTIÓN DE LA PERSISTENCIA ---
+
+    /**
+     * Guarda el estado actual del Blobbu en la BD.
+     */
+    public void saveProgress() {
+        if (blobbu != null) dbHelper.updateBlobbu(blobbu);
+    }
+
+    /**
+     * Inserta un Blobbu nuevo en la BD.
+     * Solo debe llamarse una vez, cuando nace del huevo.
+     */
+    public void insertBlobbu(Blobbu blobbu) {
+        dbHelper.insertBlobbu(blobbu);
+    }
+
+    /**
+     * Actualiza el Blobbu existente en la BD.
+     */
+    public void updateBlobbu(Blobbu blobbu) {
+        dbHelper.updateBlobbu(blobbu);
+    }
+
+    /**
+     * Carga el Blobbu directamente desde la BD.
+     * Útil para comprobar si ya existe antes de insertar.
+     */
+    public Blobbu loadBlobbuFromDb() {
+        return dbHelper.getBlobbu();
+    }
+
+    /**
+     * Actualiza la instancia de Blobbu en memoria.
+     * Llamar tras crear o modificar el Blobbu externamente.
+     */
+    public void initBlobbu(Blobbu newBlobbu) {
+        this.blobbu = newBlobbu;
+        degradationManager.setBlobbu(newBlobbu);
+    }
+
+    /**
+     * Desbloquea una criatura en la galería por su EvolutionType.
+     */
+    public void unlockCreature(EvolutionType type) {
+        dbHelper.unlockCreature(type.ordinal());
+    }
+
+    /**
+     * Garantiza que existen todas las filas de galería en la BD.
+     */
+    public void ensureGalleryRows() {
+        dbHelper.ensureGalleryRows();
+    }
+
+    public StatsDegradationManager getDegradationManager() {
+        return degradationManager;
+    }
+
+    public Blobbu getBlobbu() {
+        return blobbu;
+    }
+
+    public EvolutionManager getEvolutionManager() {
+        return evolutionManager;
+    }
+}
