@@ -95,7 +95,8 @@ public class MainActivity extends BaseActivity {
 
         popupView.findViewById(R.id.btn_play).setOnClickListener(v -> {
             gameFragment.performAction(BlobbuAction.PLAY);
-            actionsPopup.dismiss();
+            Intent intent = new Intent(MainActivity.this, MinigameActivity.class);
+            startActivity(intent);
         });
 
         popupView.findViewById(R.id.btn_pomodoro).setOnClickListener(v ->{
