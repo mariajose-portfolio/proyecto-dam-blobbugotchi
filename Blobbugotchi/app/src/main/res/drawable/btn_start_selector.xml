@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Estado presionado: más oscuro -->
+    <item android:state_pressed="true">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <gradient
+                        android:type="linear"
+                        android:angle="135"
+                        android:startColor="#0a1220"
+                        android:centerColor="#063467"
+                        android:endColor="#0d2a50" />
+                    <corners android:radius="50dp" />
+                    <stroke
+                        android:width="2dp"
+                        android:color="#B5D5DA" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <!-- Estado normal -->
+    <item>
+        <layer-list>
+            <!-- Capa base: degradado principal -->
+            <item>
+                <shape android:shape="rectangle">
+                    <gradient
+                        android:type="linear"
+                        android:angle="135"
+                        android:startColor="#166DA6"
+                        android:centerColor="#063467"
+                        android:endColor="#0a1a2e" />
+                    <corners android:radius="50dp" />
+                    <stroke
+                        android:width="2dp"
+                        android:color="#B5D5DA" />
+                </shape>
+            </item>
+            <!-- Capa superior: brillo interno sutil -->
+            <item
+                android:top="0dp"
+                android:bottom="28dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#26B5D5DA" />
+                    <corners
+                        android:topLeftRadius="50dp"
+                        android:topRightRadius="50dp"
+                        android:bottomLeftRadius="0dp"
+                        android:bottomRightRadius="0dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+</selector>
