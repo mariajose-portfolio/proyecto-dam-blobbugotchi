@@ -309,7 +309,6 @@ public class GameFragment extends Fragment {
     }
 
     // --- Render ---
-
     /** Lanza el render completo según la fase actual. */
     private void render() {
         if (currentPhase == EvolutionType.EGG) {
@@ -424,7 +423,7 @@ public class GameFragment extends Fragment {
         flashOut.setDuration(150);
 
         // --- Fase 2: Tres parpadeos del screenBackground ---
-        // Cada parpadeo: fade out → fade in de screenBackground
+        // Cada parpadeo: fade out a fade in de screenBackground
         AnimatorSet blink1 = buildBlink(screenBackground, 180);
         AnimatorSet blink2 = buildBlink(screenBackground, 180);
         AnimatorSet blink3 = buildBlink(screenBackground, 180);
@@ -493,12 +492,8 @@ public class GameFragment extends Fragment {
         scaleUp.playTogether(scaleUpX, scaleUpY);
 
         // --- Fase 4: Quita el tinte negro (500ms) ---
-        ObjectAnimator tintOut = ObjectAnimator.ofArgb(
-                petImage,
-                "colorFilter",
-                Color.BLACK,
-                Color.TRANSPARENT
-        );
+        ObjectAnimator tintOut = ObjectAnimator.ofArgb(petImage, "colorFilter",
+                Color.BLACK, Color.TRANSPARENT);
         tintOut.setEvaluator(new ArgbEvaluator());
         tintOut.setDuration(500);
 

@@ -1,33 +1,33 @@
 package com.example.blobbugotchi.Controller;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+
+import com.example.blobbugotchi.DataLayer.DatabaseHelper;
+import com.example.blobbugotchi.Model.Blobbu.Blobbu;
 
 public class ScoreManager {
-    private static final String PREFS_NAME = "fishy_prefs";
-    private static final String KEY_RECORD = "high_score";
-    private final SharedPreferences prefs;
+
+    private final DatabaseHelper db;
 
     public ScoreManager(Context context) {
-        prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        db = DatabaseHelper.getInstance(context);
     }
 
     public int getHighScore() {
-        return prefs.getInt(KEY_RECORD, 0);
+        Blobbu blobbu = db.getBlobbu();
+        return blobbu != null ? blobbu.getMaxScore() : 0;
     }
 
     /**
-     * Compara la puntuación con el record actual.
-     * Si es mayor, lo guarda y devuelve true.
+     * Compara la puntuación con el récord actual.
+     * Si es mayor, lo persiste en el Blobbu y devuelve true.
      * Si no, devuelve false.
      */
     public boolean submitScore(int score) {
         if (score > getHighScore()) {
-            prefs.edit().putInt(KEY_RECORD, score).apply();
-
-            return true; // Nuevo record
+            db.saveMaxScore(score);
+            return true; // Nuevo récord
         }
-
         return false;
     }
 }
