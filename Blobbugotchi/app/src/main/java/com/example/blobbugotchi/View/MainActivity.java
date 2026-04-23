@@ -10,7 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 import com.example.blobbugotchi.Controller.GameFragment;
 import com.example.blobbugotchi.Controller.SoundManager;
@@ -18,6 +17,9 @@ import com.example.blobbugotchi.DataLayer.DatabaseHelper;
 import com.example.blobbugotchi.Model.Blobbu.BlobbuAction;
 import com.example.blobbugotchi.Model.Config.Configuration;
 import com.example.blobbugotchi.R;
+import com.example.blobbugotchi.View.Minigame.MenuActivity;
+import com.example.blobbugotchi.View.Minigame.MinigameActivity;
+import com.example.blobbugotchi.View.Pomodoro.PomodoroActivity;
 
 public class MainActivity extends BaseActivity {
     private LinearLayout statsBars;
@@ -95,7 +97,7 @@ public class MainActivity extends BaseActivity {
 
         popupView.findViewById(R.id.btn_play).setOnClickListener(v -> {
             gameFragment.performAction(BlobbuAction.PLAY);
-            Intent intent = new Intent(MainActivity.this, MinigameActivity.class);
+            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
             startActivity(intent);
         });
 

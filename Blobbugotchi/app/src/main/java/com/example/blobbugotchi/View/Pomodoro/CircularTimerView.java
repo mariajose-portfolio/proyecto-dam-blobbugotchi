@@ -1,4 +1,4 @@
-package com.example.blobbugotchi.View;
+package com.example.blobbugotchi.View.Pomodoro;
 
 import android.content.Context;
 import android.graphics.Canvas;

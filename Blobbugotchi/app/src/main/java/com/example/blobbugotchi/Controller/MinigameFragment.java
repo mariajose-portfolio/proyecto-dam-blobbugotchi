@@ -20,7 +20,7 @@ import com.example.blobbugotchi.Model.Games.Minigame.Star;
 import com.example.blobbugotchi.Model.Games.Minigame.TileMap;
 import com.example.blobbugotchi.Model.Games.Minigame.Trap;
 import com.example.blobbugotchi.R;
-import com.example.blobbugotchi.View.MinigameActivity;
+import com.example.blobbugotchi.View.Minigame.MinigameActivity;
 
 import java.util.ArrayList;
 import java.util.List;

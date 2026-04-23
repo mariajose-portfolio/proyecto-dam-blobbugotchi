@@ -1,4 +1,4 @@
-package com.example.blobbugotchi.View;
+package com.example.blobbugotchi.View.Pomodoro;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import com.example.blobbugotchi.Controller.GameFragment;
 import com.example.blobbugotchi.Controller.SoundManager;
 import com.example.blobbugotchi.Model.Games.Pomodoro;
 import com.example.blobbugotchi.R;
+import com.example.blobbugotchi.View.BaseActivity;
 
 public class PomodoroActivity extends BaseActivity {
 

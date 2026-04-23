@@ -11,16 +11,13 @@ public class SoundManager {
 
     private static SoundManager instance;
 
-    // --- BGM (música de fondo, solo una a la vez) ---
+    // --- BGM ---
     private MediaPlayer mediaPlayer;
 
-    // --- SFX (efectos de sonido, pueden solaparse) ---
+    // --- SFX  ---
     private SoundPool soundPool;
     private int sfxAccept;
-    private int sfxCoin;
-    private int sfxDeath;
-    private int sfxHatch;
-    private int sfxJump;
+    private int sfxCoin, sfxHatch, sfxStar, sfxHit;
 
     // --- Volúmenes (0.0 - 1.0) ---
     private float masterVolume = 1f;
@@ -42,20 +39,22 @@ public class SoundManager {
         return instance;
     }
 
-    /**
-     * Carga todos los SFX en el SoundPool para reproducción inmediata
-     */
+    /** Carga todos los SFX en el SoundPool para reproducción inmediata */
     private void initSoundPool() {
         AudioAttributes attributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_GAME)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build();
 
-        soundPool = new SoundPool.Builder().setMaxStreams(5).setAudioAttributes(attributes).build();
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(5)
+                .setAudioAttributes(attributes)
+                .build();
 
-        sfxAccept = soundPool.load(context, R.raw.sfx_accept, 1);
-        sfxCoin = soundPool.load(context, R.raw.sfx_coin, 1);
-        sfxDeath = soundPool.load(context, R.raw.sfx_death, 1);
+        sfxAccept = soundPool.load(context, R.raw.accept_sfx, 1);
+        sfxCoin = soundPool.load(context, R.raw.coin_sfx, 1);
+        sfxStar = soundPool.load(context, R.raw.star_sfx, 1);
+        sfxHit = soundPool.load(context, R.raw.hit_sfx, 1);
         sfxHatch = soundPool.load(context, R.raw.sfx_hatch, 1);
     }
 
@@ -64,13 +63,31 @@ public class SoundManager {
      * Si ya hay una en reproducción la detiene primero.
      */
     private void playBGM(int resId) {
-        stopBGM(); // limpia el anterior si existe
+        stopBGM();
         mediaPlayer = MediaPlayer.create(context, resId);
-
         if (mediaPlayer != null) {
             mediaPlayer.setLooping(true);
-            float vol = masterVolume * bgmVolume;
-            mediaPlayer.setVolume(vol, vol);
+            applyBGMVolume();
+            mediaPlayer.start();
+        }
+    }
+
+    /**
+     * Reproduce un jingle de una sola vez (sin bucle), útil para los
+     * sonidos de victoria/derrota del minijuego. Para la BGM anterior
+     * antes de reproducirlo.
+     */
+    public void playOneShotBGM(int resId) {
+        stopBGM();
+        mediaPlayer = MediaPlayer.create(context, resId);
+        if (mediaPlayer != null) {
+            mediaPlayer.setLooping(false);
+            mediaPlayer.setOnCompletionListener(mp -> {
+                mp.release();
+                mediaPlayer = null;
+            });
+
+            applyBGMVolume();
             mediaPlayer.start();
         }
     }
@@ -114,7 +131,7 @@ public class SoundManager {
     }
 
     /** Música nocturna cuando el blobbu duerme */
-    public void playSleepBGM() {
+    public void playSleepBGM()  {
         playBGM(R.raw.bgm_sleep);
     }
 
@@ -123,14 +140,9 @@ public class SoundManager {
         playSfx(sfxAccept);
     }
 
-    /** Sonido de moneda (ej: recompensa en minijuego) */
+    /** Sonido de moneda (recoger en el minijuego) */
     public void playSfxCoin() {
         playSfx(sfxCoin);
-    }
-
-    /** Sonido de muerte / game over */
-    public void playSfxDeath() {
-        playSfx(sfxDeath);
     }
 
     /** Sonido de eclosión del huevo */
@@ -138,9 +150,20 @@ public class SoundManager {
         playSfx(sfxHatch);
     }
 
-    /** Sonido de salto (minijuego) */
-    public void playSfxJump() {
-        playSfx(sfxJump);
+    /**
+     * Sonido de estrella / vida extra.
+     * Mapeado a soundType = 2 en GameListener.onPlaySound()
+     */
+    public void playSfxStar() {
+        playSfx(sfxStar);
+    }
+
+    /**
+     * Sonido de golpe / daño (trampa o enemigo).
+     * Mapeado a soundType = 1 en GameListener.onPlaySound()
+     */
+    public void playSfxHit() {
+        playSfx(sfxHit);
     }
 
     private void playSfx(int soundId) {
@@ -149,7 +172,7 @@ public class SoundManager {
     }
 
     /**
-     * Actualiza el volumen maestro y lo aplica inmediatamente a la BGM
+     * Actualiza el volumen maestro y lo aplica inmediatamente a la BGM.
      * @param volume valor entre 0.0 y 1.0
      */
     public void setMasterVolume(float volume) {
@@ -158,7 +181,7 @@ public class SoundManager {
     }
 
     /**
-     * Actualiza el volumen de música y lo aplica inmediatamente
+     * Actualiza el volumen de música y lo aplica inmediatamente.
      * @param volume valor entre 0.0 y 1.0
      */
     public void setBgmVolume(float volume) {
@@ -167,7 +190,7 @@ public class SoundManager {
     }
 
     /**
-     * Actualiza el volumen de efectos de sonido
+     * Actualiza el volumen de efectos de sonido.
      * @param volume valor entre 0.0 y 1.0
      */
     public void setSfxVolume(float volume) {
@@ -201,7 +224,6 @@ public class SoundManager {
      */
     public void release() {
         stopBGM();
-
         if (soundPool != null) {
             soundPool.release();
             soundPool = null;
