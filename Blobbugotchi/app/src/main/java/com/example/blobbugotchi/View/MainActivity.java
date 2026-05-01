@@ -18,7 +18,6 @@ import com.example.blobbugotchi.Model.Blobbu.BlobbuAction;
 import com.example.blobbugotchi.Model.Config.Configuration;
 import com.example.blobbugotchi.R;
 import com.example.blobbugotchi.View.Minigame.MenuActivity;
-import com.example.blobbugotchi.View.Minigame.MinigameActivity;
 import com.example.blobbugotchi.View.Pomodoro.PomodoroActivity;
 
 public class MainActivity extends BaseActivity {

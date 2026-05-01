@@ -12,8 +12,8 @@ import java.util.List;
 
 public class EvolutionManager {
 
-    private static final long BABY_TO_TEEN_MS  = 2L * 24 * 60 * 60 * 1000;
-    private static final long TEEN_TO_ADULT_MS = 5L * 24 * 60 * 60 * 1000;
+    private static final long BABY_TO_TEEN_MS  = 2L * 24 * 60 * 60 * 1000; // 2 días
+    private static final long TEEN_TO_ADULT_MS = 5L * 24 * 60 * 60 * 1000; // 5 días
 
     private final DatabaseHelper dbHelper;
     private OnEvolutionListener listener;

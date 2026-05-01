@@ -10,7 +10,6 @@ public class Blobbu {
     private int careMistakes;
     private double timeTogether;
     private int maxScore;
-
     private BlobbuState currentState; // Control del estado
     private EvolutionType evolutionType;
     private EvolutionType previousEvolutionType;
@@ -104,7 +103,7 @@ public class Blobbu {
         hungryLvl = clamp(hungryLvl - 1);
         sleepinessLvl = clamp(sleepinessLvl - 1);
         happyLvl = clamp(happyLvl - 1);
-        timeTogether += 0.1;
+        timeTogether += 5.0 / 3600.0; // Cada tick representa 5 segundos = 5/3600 horas
         updateState();
     }
 
@@ -120,21 +119,6 @@ public class Blobbu {
     // Getter de maxScore
     public int getMaxScore() {
         return maxScore;
-    }
-
-    // Constructor estático para cargar desde BD
-    public static Blobbu fromDatabase(String name, EvolutionType evolutionType, int happyLvl,
-         int hungryLvl, int sleepinessLvl, int careMistakes, double timeTogether, int maxScore) {
-        Blobbu blobbu = new Blobbu(name);
-        blobbu.happyLvl = happyLvl;
-        blobbu.hungryLvl = hungryLvl;
-        blobbu.sleepinessLvl = sleepinessLvl;
-        blobbu.careMistakes = careMistakes;
-        blobbu.timeTogether = timeTogether;
-        blobbu.maxScore = maxScore;
-        blobbu.updateState();
-
-        return blobbu;
     }
 
     /**
@@ -193,6 +177,7 @@ public class Blobbu {
         updateState();
     }
 
+    // Constructor estático para cargar desde BD
     public static Blobbu fromDatabase(String name, EvolutionType evolutionType,
                                       EvolutionType prevEvolutionType, int happyLvl, int hungryLvl,
                                       int sleepinessLvl, int careMistakes, double timeTogether, int maxScore) {
@@ -206,6 +191,7 @@ public class Blobbu {
         blobbu.timeTogether = timeTogether;
         blobbu.maxScore = maxScore;
         blobbu.updateState();
+
         return blobbu;
     }
 

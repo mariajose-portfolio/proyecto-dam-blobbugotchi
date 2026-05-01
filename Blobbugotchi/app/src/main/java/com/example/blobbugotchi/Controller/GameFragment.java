@@ -232,11 +232,17 @@ public class GameFragment extends Fragment {
                 break;
             case POMODORO:
                 if (isSleeping) {
-                    performWakeUp(); // Despierta antes del pomodoro
+                    performWakeUp();
+                }
+
+                // Sincroniza la fase por si ha evolucionado
+                if (blobbu.getEvolutionType() != null) {
+                    currentPhase = blobbu.getEvolutionType();
                 }
 
                 gameController.checkEvolution();
                 renderBlobbu(blobbu);
+                playBlobbuAnimation();
                 break;
         }
     }
@@ -360,16 +366,24 @@ public class GameFragment extends Fragment {
 
     /**
      * Selecciona la animación correcta según la fase evolutiva y el estado
-     * actual del Blobbu, y la reproduce.
+     * actual del Blobbu, y la reproduce
      */
     private void playBlobbuAnimation() {
-        if (blobbu == null) {
-            return;
-        }
+        if (blobbu == null) return;
+
+        syncPhase(); // Garantiza que siempre use la fase correcta
 
         int animRes = BlobbuAnimator.getAnimationRes(currentPhase, blobbu.getCurrentState());
         petImage.setImageResource(animRes);
         startAnimation();
+    }
+
+    // Sincroniza currentPhase con la evolución real del blobbu
+    private void syncPhase() {
+        if (blobbu != null && blobbu.getEvolutionType() != null
+                && blobbu.getEvolutionType() != EvolutionType.EGG) {
+            currentPhase = blobbu.getEvolutionType();
+        }
     }
 
     private void startAnimation() {
@@ -464,7 +478,6 @@ public class GameFragment extends Fragment {
      * @param onFinished    Se ejecuta al terminar toda la animación.
      */
     private void playPokemonEvolutionAnimation(Runnable onSpriteSwap, Runnable onFinished) {
-
         // --- Fase 1: Tiñe el sprite de negro (300ms) ---
         ObjectAnimator tintIn = ObjectAnimator.ofArgb(
                 petImage,

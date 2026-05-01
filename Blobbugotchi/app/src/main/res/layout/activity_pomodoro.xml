@@ -75,7 +75,7 @@
             android:scaleType="centerInside" />
 
         <!-- Arco exterior — más grande que el FrameLayout -->
-        <com.tamagotchi.View.CircularTimerView
+        <com.example.blobbugotchi.View.Pomodoro.CircularTimerView
             android:id="@+id/circularTimer"
             android:layout_width="260dp"
             android:layout_height="260dp"

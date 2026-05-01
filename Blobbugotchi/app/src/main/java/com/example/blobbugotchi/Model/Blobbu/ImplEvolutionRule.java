@@ -14,18 +14,18 @@ public class ImplEvolutionRule {
 
     public static List<EvolutionRule> getTeenRules() {
         return Arrays.asList(
-                new EvolutionRule(EvolutionType.TEEN_MEW, minScore(100)),
+                new EvolutionRule(EvolutionType.TEEN_ART, minHappy(5)),
                 new EvolutionRule(EvolutionType.TEEN_TIDES, minTimeTogether(1.0)),
-                new EvolutionRule(EvolutionType.TEEN_ART, minHappy(5))
+                new EvolutionRule(EvolutionType.TEEN_MEW, minScore(100))
         );
     }
 
     public static List<EvolutionRule> getAdultRules() {
         return Arrays.asList(
-                //new EvolutionRule(EvolutionType.ADULT_SECRET, all(minTimeTogether(2.0), noCareMistakes())),
-                new EvolutionRule(EvolutionType.ADULT_MER, minTimeTogether(2.0)),
+                new EvolutionRule(EvolutionType.ADULT_ART, previousEvolution(EvolutionType.TEEN_ART)),
                 new EvolutionRule(EvolutionType.ADULT_MEW, previousEvolution(EvolutionType.TEEN_MEW)),
-                new EvolutionRule(EvolutionType.ADULT_ART, previousEvolution(EvolutionType.TEEN_ART))
+                new EvolutionRule(EvolutionType.ADULT_MER, minTimeTogether(2.0))
+                //new EvolutionRule(EvolutionType.ADULT_SECRET, all(minTimeTogether(2.0), noCareMistakes())),
         );
     }
 }
