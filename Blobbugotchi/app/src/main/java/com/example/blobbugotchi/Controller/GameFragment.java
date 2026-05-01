@@ -191,6 +191,9 @@ public class GameFragment extends Fragment {
 
             // Actualiza la instancia en memoria y sincroniza el degradationManager
             gameController.initBlobbu(newBlobbu);
+
+            // Da una tregua para saciar las necesidades antes de registrar un error de cuidado
+            degradationManager.startGracePeriod();
             gameController.unlockCreature(EvolutionType.BABY);
 
             blobbu = newBlobbu;
