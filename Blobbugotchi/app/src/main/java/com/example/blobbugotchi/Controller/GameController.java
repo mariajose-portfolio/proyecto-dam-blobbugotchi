@@ -49,11 +49,12 @@ public class GameController {
     }
 
     /**
-     * Hace jugar al Blobbu y guarda el progreso
+     * Recompensa al Blobbu por haber jugado al minijuego,
+     * independientemente del resultado.
      */
-    public void playWithBlobbu() {
+    public void rewardMinigame() {
         if (blobbu == null) return;
-        blobbu.play(20);
+        blobbu.play(30); // Sube felicidad por haber jugado
         saveProgress();
     }
 

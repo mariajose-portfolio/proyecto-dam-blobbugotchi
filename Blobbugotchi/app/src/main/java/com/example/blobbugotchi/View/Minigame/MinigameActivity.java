@@ -8,6 +8,7 @@ import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 
+import com.example.blobbugotchi.Controller.GameController;
 import com.example.blobbugotchi.Controller.MinigameFragment;
 import com.example.blobbugotchi.Controller.ScoreManager;
 import com.example.blobbugotchi.Controller.SoundManager;
@@ -46,6 +47,7 @@ public class MinigameActivity extends BaseActivity implements MinigameFragment.G
     @Override
     public void onLevelComplete(int nextLevel, int score) {
         levelCompleted = true; // la música debe continuar, no resetear
+
         gameView.postDelayed(() -> {
             Intent intent = new Intent(this, MinigameActivity.class);
             intent.putExtra(EXTRA_LEVEL, nextLevel);
@@ -101,13 +103,20 @@ public class MinigameActivity extends BaseActivity implements MinigameFragment.G
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) hideSystemUI();
+
+        if (hasFocus) {
+            hideSystemUI();
+        }
     }
 
     private void playEndSound(int resId, int score) {
-        if (endSoundPlayed) return;
+        if (endSoundPlayed) {
+            return;
+        }
+
         endSoundPlayed = true;
         scoreManager.submitScore(score);
+        GameController.getInstance(this).rewardMinigame();
         SoundManager.getInstance(this).playOneShotBGM(resId);
     }
 
@@ -116,6 +125,7 @@ public class MinigameActivity extends BaseActivity implements MinigameFragment.G
             getWindow().getDecorView().post(() -> {
                 getWindow().setDecorFitsSystemWindows(false);
                 WindowInsetsController c = getWindow().getInsetsController();
+
                 if (c != null) {
                     c.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
                     c.setSystemBarsBehavior(

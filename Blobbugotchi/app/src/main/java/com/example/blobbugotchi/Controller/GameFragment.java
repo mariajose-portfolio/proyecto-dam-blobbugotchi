@@ -214,19 +214,27 @@ public class GameFragment extends Fragment {
 
         switch (action) {
             case FEED:
-                if (isSleeping) return; // No come mientras duerme
-                if (blobbu.getHungryLvl() >= 100) return; // No come si está lleno
+                if (isSleeping) {
+                    return; // No come mientras duerme
+                }
+
+                if (blobbu.getHungryLvl() >= 100) {
+                    return; // No come si está lleno
+                }
+
                 performFeedUI();
                 gameController.feedBlobbu();
                 break;
             case PLAY:
-                if (isSleeping) performWakeUp(); // Despierta antes de jugar
-                gameController.playWithBlobbu();
+                if (isSleeping) {
+                    performWakeUp(); // Despierta antes de jugar
+                }
+
                 renderBlobbu(blobbu);
                 break;
             case SLEEP:
                 if (isSleeping) {
-                    performSleepUI(); // Si duerme, el botón lo despierta
+                    performSleepUI(); // Si duerme, lo despierta
                 }
                 else {
                     if (blobbu.getSleepinessLvl() >= 100) return; // No duerme si no tiene sueño
