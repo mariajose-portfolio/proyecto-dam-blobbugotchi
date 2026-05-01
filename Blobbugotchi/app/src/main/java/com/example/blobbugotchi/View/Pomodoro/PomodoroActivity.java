@@ -14,9 +14,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.blobbugotchi.Controller.BlobbuAnimator;
 import com.example.blobbugotchi.Controller.GameController;
 import com.example.blobbugotchi.Controller.GameFragment;
 import com.example.blobbugotchi.Controller.SoundManager;
+import com.example.blobbugotchi.Model.Blobbu.Blobbu;
+import com.example.blobbugotchi.Model.Blobbu.BlobbuState;
+import com.example.blobbugotchi.Model.Blobbu.EvolutionType;
 import com.example.blobbugotchi.Model.Games.Pomodoro;
 import com.example.blobbugotchi.R;
 import com.example.blobbugotchi.View.BaseActivity;
@@ -69,7 +73,15 @@ public class PomodoroActivity extends BaseActivity {
 
         // Arrancar la animación del blobbu
         ImageView ivMascot = findViewById(R.id.ivMascot);
-        ivMascot.setImageResource(R.drawable.anim_baby_reading);
+
+        // Obtiene la animación correcta según la fase actual del blobbu
+        Blobbu currentBlobbu = gameController.getBlobbu();
+        if (currentBlobbu != null) {
+            EvolutionType phase = currentBlobbu.getEvolutionType();
+            int animRes = BlobbuAnimator.getAnimationRes(phase, BlobbuState.POMODORO);
+            ivMascot.setImageResource(animRes);
+        }
+
         ivMascot.post(() -> {
             AnimationDrawable anim = (AnimationDrawable) ivMascot.getDrawable();
             anim.start();
