@@ -14,9 +14,10 @@ import androidx.appcompat.widget.AppCompatButton;
 import com.example.blobbugotchi.Controller.ScoreManager;
 import com.example.blobbugotchi.Controller.SoundManager;
 import com.example.blobbugotchi.R;
+import com.example.blobbugotchi.View.BaseActivity;
 import com.example.blobbugotchi.View.ConfigurationActivity;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends BaseActivity {
 
     private boolean launchingGame = false;
     private ScoreManager scoreManager;

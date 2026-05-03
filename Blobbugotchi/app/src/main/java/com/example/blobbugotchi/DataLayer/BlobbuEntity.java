@@ -6,6 +6,7 @@ public class BlobbuEntity {
     String evolutionType;
     int happyLvl;
     int hungryLvl;
+    int sleepinessLvl;
     int careMistakes;
     double timeTogether;
     int maxScore;
