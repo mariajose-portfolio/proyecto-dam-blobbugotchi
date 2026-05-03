@@ -58,6 +58,12 @@ public class GameController {
         saveProgress();
     }
 
+    public void updateMaxScore(int score) {
+        if (blobbu != null && score > blobbu.getMaxScore()) {
+            blobbu.setMaxScore(score); // necesitas añadir este setter en Blobbu
+        }
+    }
+
     /**
      * Pone a dormir o despierta al Blobbu y guarda el progreso
      */

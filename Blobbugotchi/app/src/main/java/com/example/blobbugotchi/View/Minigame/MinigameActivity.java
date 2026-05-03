@@ -116,8 +116,8 @@ public class MinigameActivity extends BaseActivity implements MinigameFragment.G
 
         endSoundPlayed = true;
         scoreManager.submitScore(score);
-        GameController.getInstance(this).rewardMinigame();
-        SoundManager.getInstance(this).playOneShotBGM(resId);
+        GameController.getInstance(this).updateMaxScore(score); // sincroniza memoria
+        GameController.getInstance(this).rewardMinigame(); // saveProgress no machaca el récord
     }
 
     private void hideSystemUI() {

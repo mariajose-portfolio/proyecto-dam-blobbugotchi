@@ -121,6 +121,10 @@ public class Blobbu {
         return maxScore;
     }
 
+    public void setMaxScore(int score){
+        this.maxScore = score;
+    }
+
     /**
      * Si el jugador no atiende a tiempo una necesidad,
      * se añade un error de cuidado
