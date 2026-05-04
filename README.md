@@ -71,16 +71,22 @@ Proyecto Intermodular de Grado Superior en Desarrollo de Aplicaciones Multiplata
 ## 📸 Capturas
 
 ### Configuración
-![Configuración](capturas/configuracion.PNG)
+![Configuración](capturas/configuracion.jpg)
 
 ### Pantalla principal
 ![Home](capturas/home.PNG)
 
 ### Pantall principal con menú a la vista
-![Home 2](capturas/home2.PNG)
+![Home 2](capturas/home2.jpg)
 
 ### Galería de Blobbus
-![Galería](capturas/galeria.PNG)
+![Galería](capturas/galeria.jpg)
+
+### Minijuego - Fishy Scape
+![Galería](capturas/minijuego.jpg)
+
+### Pomodoro
+![Galería](capturas/pomodoro.jpg)
 
 ---
 
