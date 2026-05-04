@@ -65,6 +65,8 @@ Proyecto Intermodular de Grado Superior en Desarrollo de Aplicaciones Multiplata
 - **Persistencia de datos:** guardar y cargar el progreso del Blobbu con SQLite
 - Sistema de desbloqueo de la galería ligado a las evoluciones conseguidas
 - Integración completa del Pomodoro con las estadísticas del Blobbu
+- Sistema de evolución: el Blobbu cambia de forma según cómo lo hayas cuidado
+- Minijuego para subir la felicidad
 
 ---
 
@@ -90,10 +92,11 @@ Proyecto Intermodular de Grado Superior en Desarrollo de Aplicaciones Multiplata
 
 ---
 
-## 🚧 Funcionalidades pendientes
+## 🚧 Futuras mejoras
 
-- Sistema de evolución: el Blobbu cambia de forma según cómo lo hayas cuidado
-- Minijuego para subir la felicidad
+- Degradación de estadísticas con la app cerrada y notificaciones push
+- Árbol de evolución más complejo con más ramas
+- Más niveles en Fishy Escape
 
 ---
 
